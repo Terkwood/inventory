@@ -1,9 +1,12 @@
 #![recursion_limit = "1024"]
-use wasm_bindgen::prelude::*;
-use yew::prelude::*;
+extern crate serde_derive;
+extern crate serde_json;
 
 mod inventory;
 mod web;
+
+use wasm_bindgen::prelude::*;
+use yew::prelude::*;
 
 struct Model {
     link: ComponentLink<Self>,
