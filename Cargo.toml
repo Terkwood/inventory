@@ -4,7 +4,7 @@ description = "Track resentments, fears, etc in support of your 12-step program"
 edition = "2018"
 license = "MIT"
 name = "inventory"
-version = "0.0.1"
+version = "0.1.0-a"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
