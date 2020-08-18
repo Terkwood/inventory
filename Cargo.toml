@@ -1,7 +1,9 @@
 [package]
 authors = ["Terkwood <38859656+Terkwood@users.noreply.github.com>"]
+description = "Track resentments, fears, etc in support of your 12-step program"
 edition = "2018"
-name = "tenth-step"
+license = "MIT"
+name = "inventory"
 version = "0.0.0"
 
 [lib]
