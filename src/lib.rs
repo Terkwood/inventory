@@ -1,5 +1,9 @@
+#![recursion_limit = "1024"]
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
+
+mod inventory;
+mod web;
 
 struct Model {
     link: ComponentLink<Self>,
