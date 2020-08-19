@@ -21,8 +21,8 @@ impl Inventory {
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Item {
-    item_type: ItemType,
-    text: String,
+    pub item_type: ItemType,
+    pub text: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]

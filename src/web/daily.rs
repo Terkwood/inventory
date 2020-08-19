@@ -4,10 +4,12 @@ use yew::prelude::*;
 pub struct Daily {
     link: ComponentLink<Self>,
     props: Props,
+    text_area: String,
 }
 
 pub enum Msg {
-    AddItem(Item),
+    SubmitItem(ItemType),
+    TextAreaUpdated(String),
 }
 
 #[derive(Properties, Clone, PartialEq)]
@@ -20,12 +22,24 @@ impl Component for Daily {
     type Message = Msg;
     type Properties = Props;
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, props }
+        let text_area = String::new();
+        Self {
+            link,
+            props,
+            text_area,
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::AddItem(item) => self.props.add_item.emit(item),
+            Msg::SubmitItem(item_type) => {
+                self.props.add_item.emit(Item {
+                    item_type,
+                    text: self.text_area.clone(),
+                });
+                self.text_area.clear()
+            }
+            Msg::TextAreaUpdated(text) => self.text_area = text,
         }
         true
     }
