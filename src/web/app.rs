@@ -1,10 +1,11 @@
-use crate::inventory::Item;
-use crate::storage::Repo;
+use crate::inventory::*;
+use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
     link: ComponentLink<Self>,
-    storage: Repo,
+    repo: Repo,
+    inventory: Inventory,
     add_item: Option<Callback<Item>>,
 }
 
@@ -17,12 +18,14 @@ impl Component for App {
     type Properties = ();
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
-        let storage = Repo::load();
+        let repo = Repo::new();
+        let inventory = repo.read_inventory().expect("read inventory");
 
         Self {
             link,
             add_item,
-            storage,
+            repo,
+            inventory,
         }
     }
 

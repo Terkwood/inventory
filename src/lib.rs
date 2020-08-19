@@ -3,7 +3,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 mod inventory;
-mod storage;
+mod repo;
 mod web;
 
 use wasm_bindgen::prelude::*;
