@@ -72,13 +72,26 @@ impl Component for Daily {
                 <div class="center">
                     <button
                         class="expandheight"
-                        onclick=self.link
-                                    .callback(|_| Msg::SubmitItem(DefaultItemType::Resentment.instance()))>
+                        onclick=
+                            self.link
+                                .callback(
+                                    |_| Msg::SubmitItem(
+                                        DefaultItemType::Resentment.instance()
+                                    ))>
                         { "Resentment 😠" }
                     </button>
                 </div>
                 <div class="center">
-                    <button class="expandheight" onclick=self.link.callback(|_| Msg::SubmitItem(DefaultItemType::Fear.instance()))>{ "Fear 😱" }</button>
+                    <button
+                        class="expandheight"
+                        onclick=
+                            self.link
+                                .callback(
+                                    |_| Msg::SubmitItem(
+                                        DefaultItemType::Fear.instance()
+                                    ))>
+                        { "Fear 😱" }
+                    </button>
                 </div>
             </div>
         }
