@@ -25,7 +25,13 @@ impl Repo {
             },
         )
     }
+
+    pub fn save_inventory(&self, inventory: &Inventory) -> Result<(), SaveErr> {
+        todo!()
+    }
 }
 
 #[derive(Debug)]
 pub struct ReadErr;
+#[derive(Debug)]
+pub struct SaveErr;

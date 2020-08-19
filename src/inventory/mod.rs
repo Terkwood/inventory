@@ -13,6 +13,10 @@ impl Inventory {
     pub fn today(&self) -> Self {
         todo!()
     }
+
+    pub fn add(&mut self, item: Item) {
+        self.items.push(item)
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]

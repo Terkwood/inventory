@@ -43,13 +43,18 @@ impl Component for App {
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::AddItem(item) => {
+                self.inventory.add(item);
+                self.repo
+                    .save_inventory(&self.inventory)
+                    .expect("save inventory")
+            }
+        }
         true
     }
 
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        // Should only return "true" if new properties are different to
-        // previously received properties.
-        // This component has no properties so we will always return "false".
         false
     }
 
