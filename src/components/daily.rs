@@ -41,8 +41,8 @@ impl Component for Daily {
                 self.text_area.clear()
             }
             Msg::TextAreaUpdated(text) => self.text_area = text,
-            Msg::HideInventory => todo!(),
-            Msg::ShowInventory => todo!(),
+            Msg::HideInventory => (),
+            Msg::ShowInventory => (),
         }
         true
     }

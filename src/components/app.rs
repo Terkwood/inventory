@@ -4,7 +4,7 @@ use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
-    link: ComponentLink<Self>,
+    _link: ComponentLink<Self>,
     mode: Mode,
     repo: Repo,
     inventory: Inventory,
@@ -34,7 +34,7 @@ impl Component for App {
         let mode = Mode::default();
 
         Self {
-            link,
+            _link: link,
             add_item,
             mode,
             repo,
