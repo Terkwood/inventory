@@ -1,10 +1,10 @@
 [package]
 authors = ["Terkwood <38859656+Terkwood@users.noreply.github.com>"]
-description = "Track resentments, fears, etc in support of your 12-step program"
+description = "Track inventory for your 12-step program"
 edition = "2018"
 license = "MIT"
 name = "inventory"
-version = "0.1.0-a"
+version = "0.1.0-b"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -17,3 +17,4 @@ serde_json = "1.0.57"
 wasm-bindgen = "0.2.67"
 web-sys = "0.3.44"
 yew = "0.17.3"
+chrono = "0.4.15"
