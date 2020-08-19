@@ -66,7 +66,7 @@ impl Component for App {
 impl App {
     fn view_daily(&self) -> Html {
         html! {
-            <Daily inventory={self.inventory.clone()} add_item={self.add_item.as_ref().expect("add item cb")} />
+            <Daily inventory={self.inventory.today()} add_item={self.add_item.as_ref().expect("add item cb")} />
         }
     }
 }
