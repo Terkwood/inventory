@@ -1,4 +1,5 @@
-use crate::time::js_utc_now;
+use crate::time::*;
+use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
@@ -12,7 +13,14 @@ impl Inventory {
     }
 
     pub fn today(&self) -> Self {
-        todo!()
+        let utc_now_date = Utc.timestamp_millis(js_utc_now() as i64).date();
+        let items = self
+            .items
+            .iter()
+            .filter(|item| same_date_utc(item.epoch_millis_utc, utc_now_date))
+            .cloned()
+            .collect();
+        Inventory { items }
     }
 
     pub fn add(&mut self, item: Item) {
