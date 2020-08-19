@@ -46,9 +46,7 @@ impl Component for App {
         match msg {
             Msg::AddItem(item) => {
                 self.inventory.add(item);
-                self.repo
-                    .save_inventory(&self.inventory)
-                    .expect("save inventory")
+                self.repo.save_inventory(&self.inventory)
             }
         }
         true

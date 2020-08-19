@@ -26,12 +26,11 @@ impl Repo {
         )
     }
 
-    pub fn save_inventory(&self, inventory: &Inventory) -> Result<(), SaveErr> {
-        todo!()
+    pub fn save_inventory(&mut self, inventory: &Inventory) {
+        let value = Json(inventory);
+        self.storage_service.store(INVENTORY_KEY, value)
     }
 }
 
 #[derive(Debug)]
 pub struct ReadErr;
-#[derive(Debug)]
-pub struct SaveErr;
