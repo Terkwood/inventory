@@ -10,6 +10,8 @@ pub struct Daily {
 pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
+    HideInventory,
+    ShowInventory,
 }
 
 #[derive(Properties, Clone, PartialEq)]
@@ -33,14 +35,14 @@ impl Component for Daily {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitItem(item_type) => {
-                self.props.add_item.emit(Item {
-                    item_type,
-                    text: self.text_area.clone(),
-                    epoch_millis_utc: todo!(),
-                });
+                self.props
+                    .add_item
+                    .emit(Item::new(item_type, self.text_area.clone()));
                 self.text_area.clear()
             }
             Msg::TextAreaUpdated(text) => self.text_area = text,
+            Msg::HideInventory => todo!(),
+            Msg::ShowInventory => todo!(),
         }
         true
     }
@@ -56,8 +58,28 @@ impl Component for Daily {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-
+            <div id="controlgrid">
+                <div id="bigtextgrid">
+                    <textarea
+                        rows=6
+                        value=&self.text_area
+                        onfocus=self.link.callback(|_| Msg::HideInventory)
+                        onchange=self.link.callback(|_| Msg::ShowInventory)
+                        oninput=self.link.callback(|e: InputData| Msg::TextAreaUpdated(e.value))
+                        placeholder="Please take inventory.">
+                    </textarea>
+                </div>
+                <div class="center">
+                    <button
+                        class="expandheight"
+                        onclick=self.link
+                                    .callback(|_| Msg::SubmitItem(DefaultItemType::Resentment.instance()))>
+                        { "Resentment 😠" }
+                    </button>
+                </div>
+                <div class="center">
+                    <button class="expandheight" onclick=self.link.callback(|_| Msg::SubmitItem(DefaultItemType::Fear.instance()))>{ "Fear 😱" }</button>
+                </div>
             </div>
         }
     }

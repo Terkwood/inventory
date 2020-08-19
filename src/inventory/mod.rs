@@ -1,3 +1,4 @@
+use crate::time::js_utc_now;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
@@ -29,7 +30,7 @@ pub struct Item {
 impl Item {
     pub fn new(item_type: ItemType, text: String) -> Self {
         Item {
-            epoch_millis_utc: todo!(),
+            epoch_millis_utc: js_utc_now(),
             item_type,
             text,
         }
@@ -38,3 +39,18 @@ impl Item {
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct ItemType(String);
+
+pub enum DefaultItemType {
+    Resentment,
+    Fear,
+}
+
+impl DefaultItemType {
+    pub fn instance(&self) -> ItemType {
+        let s = match self {
+            DefaultItemType::Fear => "fear",
+            DefaultItemType::Resentment => "resentment",
+        };
+        ItemType(s.to_string())
+    }
+}
