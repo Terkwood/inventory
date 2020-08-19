@@ -2,13 +2,14 @@
 extern crate serde_derive;
 extern crate serde_json;
 
+mod components;
 mod inventory;
 mod repo;
-mod web;
+mod time;
 
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    yew::App::<web::App>::new().mount_to_body();
+    yew::App::<components::App>::new().mount_to_body();
 }

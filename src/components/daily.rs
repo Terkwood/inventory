@@ -36,6 +36,7 @@ impl Component for Daily {
                 self.props.add_item.emit(Item {
                     item_type,
                     text: self.text_area.clone(),
+                    epoch_millis_utc: todo!(),
                 });
                 self.text_area.clear()
             }
