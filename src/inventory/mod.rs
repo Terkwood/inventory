@@ -9,7 +9,17 @@ impl Inventory {
     pub fn empty() -> Self {
         Self { items: vec![] }
     }
+
+    pub fn today(&self) -> Self {
+        todo!()
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
-pub struct Item {}
+pub struct Item {
+    item_type: ItemType,
+    text: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct ItemType(String);

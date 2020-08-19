@@ -1,9 +1,11 @@
+use super::daily::Daily;
 use crate::inventory::*;
 use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
     link: ComponentLink<Self>,
+    mode: Mode,
     repo: Repo,
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
@@ -13,6 +15,15 @@ pub enum Msg {
     AddItem(Item),
 }
 
+enum Mode {
+    Daily,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Mode::Daily
+    }
+}
+
 impl Component for App {
     type Message = Msg;
     type Properties = ();
@@ -20,10 +31,12 @@ impl Component for App {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
         let repo = Repo::new();
         let inventory = repo.read_inventory().expect("read inventory");
+        let mode = Mode::default();
 
         Self {
             link,
             add_item,
+            mode,
             repo,
             inventory,
         }
@@ -41,10 +54,16 @@ impl Component for App {
     }
 
     fn view(&self) -> Html {
-        html! {
-            <div>
+        match self.mode {
+            Mode::Daily => self.view_daily(),
+        }
+    }
+}
 
-            </div>
+impl App {
+    fn view_daily(&self) -> Html {
+        html! {
+            <Daily inventory={self.inventory.clone()} add_item={self.add_item.as_ref().expect("add item cb")} />
         }
     }
 }

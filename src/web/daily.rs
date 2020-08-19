@@ -1,4 +1,4 @@
-use crate::inventory::Item;
+use crate::inventory::*;
 use yew::prelude::*;
 
 pub struct Daily {
@@ -12,7 +12,7 @@ pub enum Msg {
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
-    pub items: Vec<Item>,
+    pub inventory: Inventory,
     pub add_item: Callback<Item>,
 }
 
