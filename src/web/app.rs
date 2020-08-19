@@ -1,17 +1,29 @@
 use crate::inventory::Item;
+use crate::storage::Repo;
 use yew::prelude::*;
 
 pub struct App {
     link: ComponentLink<Self>,
+    storage: Repo,
+    add_item: Option<Callback<Item>>,
 }
 
-pub enum Msg {}
+pub enum Msg {
+    AddItem(Item),
+}
 
 impl Component for App {
     type Message = Msg;
     type Properties = ();
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link }
+        let add_item = Some(link.callback(|item| Msg::AddItem(item)));
+        let storage = Repo::load();
+
+        Self {
+            link,
+            add_item,
+            storage,
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
