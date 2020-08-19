@@ -16,14 +16,12 @@ impl Repo {
         Self { storage_service }
     }
 
-    pub fn read_inventory(&self) -> Result<Inventory, ReadErr> {
-        Ok(
-            if let Json(Ok(restored_model)) = self.storage_service.restore(INVENTORY_KEY) {
-                restored_model
-            } else {
-                Inventory::empty()
-            },
-        )
+    pub fn read_inventory(&self) -> Inventory {
+        if let Json(Ok(restored_model)) = self.storage_service.restore(INVENTORY_KEY) {
+            restored_model
+        } else {
+            Inventory::empty()
+        }
     }
 
     pub fn save_inventory(&mut self, inventory: &Inventory) {
@@ -31,6 +29,3 @@ impl Repo {
         self.storage_service.store(INVENTORY_KEY, value)
     }
 }
-
-#[derive(Debug)]
-pub struct ReadErr;

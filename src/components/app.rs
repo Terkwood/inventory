@@ -30,7 +30,7 @@ impl Component for App {
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
         let repo = Repo::new();
-        let inventory = repo.read_inventory().expect("read inventory");
+        let inventory = repo.read_inventory();
         let mode = Mode::default();
 
         Self {
