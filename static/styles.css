@@ -40,7 +40,7 @@ textarea {
 }
 
 #inputgrid {
-  height: 33vmax;
+  height: 25vh;
   display: grid;
   grid-gap: 5px;
   grid-template: repeat(4, 1fr) / repeat(2, 1fr);
