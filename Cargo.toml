@@ -4,12 +4,13 @@ description = "Track inventory for your 12-step program"
 edition = "2018"
 license = "MIT"
 name = "inventory"
-version = "0.1.0-b"
+version = "0.1.0-c"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+chrono = "0.4.15"
 js-sys = "0.3.44"
 serde = "1.0.115"
 serde_derive = "1.0.115"
@@ -17,4 +18,3 @@ serde_json = "1.0.57"
 wasm-bindgen = "0.2.67"
 web-sys = "0.3.44"
 yew = "0.17.3"
-chrono = "0.4.15"

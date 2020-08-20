@@ -58,7 +58,18 @@ impl Component for Daily {
 
     fn view(&self) -> Html {
         html! {
-            <div id="controlgrid">
+            <>
+                { self.view_input() }
+                { self.view_todays_inventory() }
+            </>
+        }
+    }
+}
+
+impl Daily {
+    pub fn view_input(&self) -> Html {
+        html! {
+            <div id="inputgrid">
                 <div id="bigtextgrid">
                     <textarea
                         rows=6
@@ -95,5 +106,8 @@ impl Component for Daily {
                 </div>
             </div>
         }
+    }
+    pub fn view_todays_inventory(&self) -> Html {
+        todo!()
     }
 }
