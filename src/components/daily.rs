@@ -82,7 +82,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="expandheight"
+                        class="itembutton"
                         onclick=
                             self.link
                                 .callback(
@@ -94,7 +94,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="expandheight"
+                        class="itembutton"
                         onclick=
                             self.link
                                 .callback(

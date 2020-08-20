@@ -1,11 +1,23 @@
-.expandheight {
-  height: 100%;
+body {
+  background-color: black;
+  color: lightgrey;
+  font-size: 3vh;
 }
 
 textarea {
   width: 100%;
   height: 75%;
   font-size: 4vh;
+}
+
+.center {
+  text-align: center
+}
+
+.itembutton {
+  font-size: 5vw;
+  height: 85%;
+  width: 85%;
 }
 
 #inputgrid {
