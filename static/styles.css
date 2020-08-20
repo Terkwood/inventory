@@ -12,7 +12,7 @@ textarea {
 }
 
 .center {
-  text-align: center
+  text-align: center;
 }
 
 #inventory {
@@ -21,10 +21,10 @@ textarea {
 
 #inventory ul {
   text-align: left;
-  display:-moz-inline-stack;
-  display:inline-block;
-  zoom:1;
-  *display:inline;
+  display: -moz-inline-stack;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
   list-style-type: none;
 }
 
