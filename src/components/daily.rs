@@ -72,7 +72,6 @@ impl Daily {
             <div id="inputgrid">
                 <div id="bigtextgrid">
                     <textarea
-                        rows=6
                         value=&self.text_area
                         onfocus=self.link.callback(|_| Msg::HideInventory)
                         onchange=self.link.callback(|_| Msg::ShowInventory)
@@ -109,7 +108,7 @@ impl Daily {
     }
     pub fn view_todays_inventory(&self) -> Html {
         html! {
-            <div id="inventorygrid">
+            <div id="inventory">
                 <ul>
                     { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
                 </ul>

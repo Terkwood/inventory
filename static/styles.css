@@ -2,16 +2,35 @@ body {
   background-color: black;
   color: lightgrey;
   font-size: 3vh;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 textarea {
   width: 100%;
   height: 75%;
-  font-size: 4vh;
+  font-size: 5vw;
 }
 
 .center {
   text-align: center
+}
+
+#inventory {
+  text-align: center;
+}
+
+#inventory ul {
+  text-align: left;
+  display:-moz-inline-stack;
+  display:inline-block;
+  zoom:1;
+  *display:inline;
+  list-style-type: none;
+}
+
+.inventoryitem {
+  font-size: 5vw;
+  margin: 1vh;
 }
 
 .itembutton {
@@ -21,7 +40,7 @@ textarea {
 }
 
 #inputgrid {
-  height: 20vh;
+  height: 33vmax;
   display: grid;
   grid-gap: 5px;
   grid-template: repeat(4, 1fr) / repeat(2, 1fr);
