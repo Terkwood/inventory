@@ -2,6 +2,10 @@
 
 This webapp is designed to help track inventory related to 12-step programs.
 
+🚧 _It is currently under construction._ 🚧
+
+![work in progress](https://user-images.githubusercontent.com/38859656/90771595-866bd200-e2c1-11ea-9647-f29dcc43aa4d.png)
+
 ## Designed for Privacy
 
 It does not leak any data to the internet.  That said, your data is stored in _browser localstorage_, in an _unencrypted format_.  So please do not assume that this app is entirely secure:  its security depends on the configuration of _your_ device.
