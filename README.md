@@ -8,7 +8,7 @@ This webapp is designed to help track inventory related to 12-step programs.
 
 ## Designed for Privacy
 
-It does not leak any data to the internet.  That said, your data is stored in _browser localstorage_, in an _unencrypted format_.  So please do not assume that this app is entirely secure:  its security depends on the configuration of _your_ device.
+It does not leak any data to the internet. That said, your data is stored in _browser localstorage_, in an _unencrypted format_. So please do not assume that this app is entirely secure: its security depends on the configuration of _your_ device.
 
 Nevertheless, as long as you have control of your device and feel confident that it hasn't been compromised by malicious, third-party apps, you can expect this app to honor privacy.
 
