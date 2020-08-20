@@ -5,6 +5,7 @@ pub struct Daily {
     link: ComponentLink<Self>,
     props: Props,
     text_area: String,
+    mode: Mode,
 }
 
 pub enum Msg {
@@ -12,12 +13,19 @@ pub enum Msg {
     TextAreaUpdated(String),
     HideInventory,
     ShowInventory,
+    ToggleResolveMode,
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
+}
+
+#[derive(PartialEq)]
+pub enum Mode {
+    Default,
+    Resolve,
 }
 
 impl Component for Daily {
@@ -29,6 +37,7 @@ impl Component for Daily {
             link,
             props,
             text_area,
+            mode: Mode::Default,
         }
     }
 
@@ -43,6 +52,13 @@ impl Component for Daily {
             Msg::TextAreaUpdated(text) => self.text_area = text,
             Msg::HideInventory => (),
             Msg::ShowInventory => (),
+            Msg::ToggleResolveMode => {
+                if self.mode == Mode::Resolve {
+                    self.mode = Mode::Default
+                } else {
+                    self.mode = Mode::Resolve
+                }
+            }
         }
         true
     }
@@ -103,12 +119,24 @@ impl Daily {
                         { "Fear 😱" }
                     </button>
                 </div>
+                <div class="center">
+                    <button
+                        class="itembutton"
+                        onclick=
+                            self.link
+                                .callback(
+                                    |_| Msg::ToggleResolveMode
+                                )>
+                        { "Resolve ✅"}
+                    </button>
+                </div>
             </div>
         }
     }
     pub fn view_todays_inventory(&self) -> Html {
         html! {
             <div id="inventory">
+                { if self.mode == Mode::Resolve { html!{<>{"RESOLVE"}</>} } else { html!{<></>} }}
                 <ul>
                     { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
                 </ul>
