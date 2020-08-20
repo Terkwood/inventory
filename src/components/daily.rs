@@ -58,7 +58,18 @@ impl Component for Daily {
 
     fn view(&self) -> Html {
         html! {
-            <div id="controlgrid">
+            <>
+                { self.view_input() }
+                { self.view_todays_inventory() }
+            </>
+        }
+    }
+}
+
+impl Daily {
+    pub fn view_input(&self) -> Html {
+        html! {
+            <div id="inputgrid">
                 <div id="bigtextgrid">
                     <textarea
                         rows=6
@@ -95,5 +106,21 @@ impl Component for Daily {
                 </div>
             </div>
         }
+    }
+    pub fn view_todays_inventory(&self) -> Html {
+        html! {
+            <div id="inventorygrid">
+                <ul>
+                    { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
+                </ul>
+            </div>
+        }
+    }
+}
+fn view_item(item: &Item) -> Html {
+    html! {
+        <li class="inventoryitem">
+            { format!("{} {}" , item.item_type.emoji, item.text) }
+        </li>
     }
 }

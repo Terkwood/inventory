@@ -46,7 +46,10 @@ impl Item {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
-pub struct ItemType(String);
+pub struct ItemType {
+    pub name: String,
+    pub emoji: String,
+}
 
 pub enum DefaultItemType {
     Resentment,
@@ -55,10 +58,10 @@ pub enum DefaultItemType {
 
 impl DefaultItemType {
     pub fn instance(&self) -> ItemType {
-        let s = match self {
-            DefaultItemType::Fear => "fear",
-            DefaultItemType::Resentment => "resentment",
+        let (name, emoji) = match self {
+            DefaultItemType::Fear => ("fear".to_string(), "😱".to_string()),
+            DefaultItemType::Resentment => ("resentment".to_string(), "😠".to_string()),
         };
-        ItemType(s.to_string())
+        ItemType { name, emoji }
     }
 }
