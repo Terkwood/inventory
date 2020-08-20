@@ -108,6 +108,19 @@ impl Daily {
         }
     }
     pub fn view_todays_inventory(&self) -> Html {
-        todo!()
+        html! {
+            <div id="inventorygrid">
+                <ul>
+                    { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
+                </ul>
+            </div>
+        }
+    }
+}
+fn view_item(item: &Item) -> Html {
+    html! {
+        <li class="inventoryitem">
+            { format!("{} {}" , item.item_type.emoji, item.text) }
+        </li>
     }
 }
