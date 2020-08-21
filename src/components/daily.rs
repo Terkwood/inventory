@@ -77,8 +77,9 @@ impl Component for Daily {
                 true
             }
             Msg::Resolve(item_epoch_millis_utc) => {
+                self.mode = Mode::Default;
                 self.props.resolve_item.emit(item_epoch_millis_utc);
-                false
+                true
             }
         }
     }
