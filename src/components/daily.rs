@@ -11,23 +11,23 @@ pub struct Daily {
 pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
-    HideInventory,
-    ShowInventory,
-    ToggleResolveMode,
-    Resolve(Item),
+    FocusInput,
+    EnterResolveMode(u64),
+    Resolve(u64),
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
-    pub resolve_item: Callback<Item>,
+    pub resolve_item: Callback<u64>,
 }
 
 #[derive(PartialEq)]
 pub enum Mode {
     Default,
-    Resolve,
+    Resolve(u64),
+    Input,
 }
 
 impl Component for Daily {
@@ -46,16 +46,16 @@ impl Component for Daily {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitItem(item_type) => {
-                if self.text_area.is_empty() {
-                    false
-                } else {
+                self.mode = Mode::Default;
+                if !self.text_area.is_empty() {
                     self.props
                         .add_item
                         .emit(Item::new(item_type, self.text_area.clone()));
                     self.text_area.clear();
-                    if self.mode != Mode::Default {
-                        self.mode = Mode::Default
-                    }
+
+                    false
+                } else {
+                    // just get out of the input area
                     true
                 }
             }
@@ -63,20 +63,23 @@ impl Component for Daily {
                 self.text_area = text;
                 true
             }
-            Msg::HideInventory => false,
-            Msg::ShowInventory => false,
-            Msg::ToggleResolveMode => {
-                if self.mode == Mode::Resolve {
+            Msg::FocusInput => {
+                self.mode = Mode::Input;
+                true
+            }
+            Msg::EnterResolveMode(item_epoch_ms_utc) => {
+                if self.mode == Mode::Resolve(item_epoch_ms_utc) {
                     self.mode = Mode::Default
                 } else {
-                    self.mode = Mode::Resolve
+                    self.mode = Mode::Resolve(item_epoch_ms_utc)
                 }
 
                 true
             }
-            Msg::Resolve(item) => {
-                self.props.resolve_item.emit(item);
-                false
+            Msg::Resolve(item_epoch_millis_utc) => {
+                self.mode = Mode::Default;
+                self.props.resolve_item.emit(item_epoch_millis_utc);
+                true
             }
         }
     }
@@ -102,13 +105,17 @@ impl Component for Daily {
 
 impl Daily {
     pub fn view_input(&self) -> Html {
+        let input_grid_id = if self.mode == Mode::Input {
+            "inputgridfocus"
+        } else {
+            "inputgridwaiting"
+        };
         html! {
-            <div id="inputgrid">
+            <div id=input_grid_id>
                 <div id="bigtextgrid">
                     <textarea
                         value=&self.text_area
-                        onfocus=self.link.callback(|_| Msg::HideInventory)
-                        onchange=self.link.callback(|_| Msg::ShowInventory)
+                        onfocus=self.link.callback(|_| Msg::FocusInput)
                         oninput=self.link.callback(|e: InputData| Msg::TextAreaUpdated(e.value))
                         placeholder="Please take inventory.">
                     </textarea>
@@ -137,17 +144,6 @@ impl Daily {
                         { "Fear 😱" }
                     </button>
                 </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::ToggleResolveMode
-                                )>
-                        { "Resolve ✅"}
-                    </button>
-                </div>
             </div>
         }
     }
@@ -161,18 +157,19 @@ impl Daily {
         }
     }
     fn view_item(&self, item: Item) -> Html {
+        let epoch_ms = item.epoch_millis_utc;
         html! {
-            <li class="inventoryitem">
+            <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(epoch_ms))}>
                 { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
-                    if self.mode == Mode::Resolve {
+                    if self.mode == Mode::Resolve(item.epoch_millis_utc) {
                         html! {
                             <button
                                 class="resolve"
                                 onclick=
                                     self.link
                                         .callback(
-                                            move |_| Msg::Resolve(item.clone())
+                                            move |_| Msg::Resolve(item.epoch_millis_utc)
                                         )>
                                 { "✅"}
                             </button>
