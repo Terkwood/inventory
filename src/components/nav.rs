@@ -39,24 +39,24 @@ impl Component for Nav {
         let next = page.next();
         html! {
             <div id="nav">
-                <div class="center">
+                <div class="bottomleft">
                     <button
-                        class="bigbutton"
+                        class="navbutton"
                         onclick={
                             self.link
                                 .callback(
                                     move |_| NavMsg(prev))}>
-                        { prev }
+                        { "⏪" }
                     </button>
                 </div>
-                <div class="center">
-                <button
-                    class="bigbutton"
-                    onclick={
-                        self.link
-                            .callback(
-                                move |_| NavMsg(next))}>
-                        { next }
+                <div class="bottomright">
+                    <button
+                        class="navbutton"
+                        onclick={
+                            self.link
+                                .callback(
+                                    move |_| NavMsg(next))}>
+                            { "⏩" }
                     </button>
                 </div>
             </div>
