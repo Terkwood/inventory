@@ -58,8 +58,6 @@ textarea {
   grid-auto-flow: row;
 }
 
-
-
 #bigtextgrid {
   grid-column: 1 / span 2;
   grid-row: 1 / span 5;
