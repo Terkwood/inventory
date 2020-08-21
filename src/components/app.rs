@@ -1,11 +1,13 @@
 use super::daily::Daily;
+use super::nav::Nav;
+use super::Page;
 use crate::inventory::*;
 use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
     _link: ComponentLink<Self>,
-    mode: Mode,
+    page: Page,
     repo: Repo,
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
@@ -17,15 +19,6 @@ pub enum Msg {
     ResolveItem(u64),
 }
 
-enum Mode {
-    Daily,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Mode::Daily
-    }
-}
-
 impl Component for App {
     type Message = Msg;
     type Properties = ();
@@ -35,13 +28,13 @@ impl Component for App {
             Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
         let repo = Repo::new();
         let inventory = repo.read_inventory();
-        let mode = Mode::default();
+        let mode = Page::default();
 
         Self {
             _link: link,
             add_item,
             resolve_item,
-            mode,
+            page: mode,
             repo,
             inventory,
         }
@@ -66,8 +59,17 @@ impl Component for App {
     }
 
     fn view(&self) -> Html {
-        match self.mode {
-            Mode::Daily => self.view_daily(),
+        html! {
+            <>
+            {
+                match self.page {
+                    Page::Daily => self.view_daily(),
+                    Page::History => self.view_history(),
+                    Page::Config => self.view_config(),
+                }
+            }
+            { self.view_nav() }
+            </>
         }
     }
 }
@@ -80,6 +82,20 @@ impl App {
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
             />
+        }
+    }
+
+    fn view_history(&self) -> Html {
+        todo!()
+    }
+
+    fn view_config(&self) -> Html {
+        todo!()
+    }
+
+    fn view_nav(&self) -> Html {
+        html! {
+            <Nav page={self.page}/>
         }
     }
 }
