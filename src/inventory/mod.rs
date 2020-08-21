@@ -27,8 +27,9 @@ impl Inventory {
         self.items.push(item)
     }
 
-    pub fn resolve(&mut self, item: Item) {
-        self.items.retain(|i| i != &item)
+    pub fn resolve(&mut self, epoch_millis_utc: u64) {
+        self.items
+            .retain(|item| item.epoch_millis_utc != epoch_millis_utc)
     }
 }
 

@@ -12,21 +12,21 @@ pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
     FocusInput,
-    EnterResolveMode(Item),
-    Resolve(Item),
+    EnterResolveMode(u64),
+    Resolve(u64),
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
-    pub resolve_item: Callback<Item>,
+    pub resolve_item: Callback<u64>,
 }
 
 #[derive(PartialEq)]
 pub enum Mode {
     Default,
-    Resolve(Item),
+    Resolve(u64),
     Input,
 }
 
@@ -67,17 +67,17 @@ impl Component for Daily {
                 self.mode = Mode::Input;
                 true
             }
-            Msg::EnterResolveMode(item) => {
-                if self.mode == Mode::Resolve(item.clone()) {
+            Msg::EnterResolveMode(item_epoch_ms_utc) => {
+                if self.mode == Mode::Resolve(item_epoch_ms_utc) {
                     self.mode = Mode::Default
                 } else {
-                    self.mode = Mode::Resolve(item)
+                    self.mode = Mode::Resolve(item_epoch_ms_utc)
                 }
 
                 true
             }
-            Msg::Resolve(item) => {
-                self.props.resolve_item.emit(item);
+            Msg::Resolve(item_epoch_millis_utc) => {
+                self.props.resolve_item.emit(item_epoch_millis_utc);
                 false
             }
         }
@@ -156,18 +156,19 @@ impl Daily {
         }
     }
     fn view_item(&self, item: Item) -> Html {
+        let epoch_ms = item.epoch_millis_utc;
         html! {
-            <li class="inventoryitem">
+            <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(epoch_ms))}>
                 { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
-                    if self.mode == Mode::Resolve(item.clone()) {
+                    if self.mode == Mode::Resolve(item.epoch_millis_utc) {
                         html! {
                             <button
                                 class="resolve"
                                 onclick=
                                     self.link
                                         .callback(
-                                            move |_| Msg::Resolve(item.clone())
+                                            move |_| Msg::Resolve(item.epoch_millis_utc)
                                         )>
                                 { "✅"}
                             </button>

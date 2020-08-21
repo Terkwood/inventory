@@ -9,12 +9,12 @@ pub struct App {
     repo: Repo,
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
-    resolve_item: Option<Callback<Item>>,
+    resolve_item: Option<Callback<u64>>,
 }
 
 pub enum Msg {
     AddItem(Item),
-    ResolveItem(Item),
+    ResolveItem(u64),
 }
 
 enum Mode {
@@ -31,7 +31,8 @@ impl Component for App {
     type Properties = ();
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
-        let resolve_item = Some(link.callback(|item| Msg::ResolveItem(item)));
+        let resolve_item =
+            Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
         let repo = Repo::new();
         let inventory = repo.read_inventory();
         let mode = Mode::default();
@@ -52,8 +53,8 @@ impl Component for App {
                 self.inventory.add(item);
                 self.repo.save_inventory(&self.inventory)
             }
-            Msg::ResolveItem(item) => {
-                self.inventory.resolve(item);
+            Msg::ResolveItem(utc) => {
+                self.inventory.resolve(utc);
                 self.repo.save_inventory(&self.inventory)
             }
         }
