@@ -46,27 +46,39 @@ impl Component for Daily {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitItem(item_type) => {
-                self.props
-                    .add_item
-                    .emit(Item::new(item_type, self.text_area.clone()));
-                self.text_area.clear();
-                if self.mode != Mode::Default {
-                    self.mode = Mode::Default
+                if self.text_area.is_empty() {
+                    false
+                } else {
+                    self.props
+                        .add_item
+                        .emit(Item::new(item_type, self.text_area.clone()));
+                    self.text_area.clear();
+                    if self.mode != Mode::Default {
+                        self.mode = Mode::Default
+                    }
+                    true
                 }
             }
-            Msg::TextAreaUpdated(text) => self.text_area = text,
-            Msg::HideInventory => (),
-            Msg::ShowInventory => (),
+            Msg::TextAreaUpdated(text) => {
+                self.text_area = text;
+                true
+            }
+            Msg::HideInventory => false,
+            Msg::ShowInventory => false,
             Msg::ToggleResolveMode => {
                 if self.mode == Mode::Resolve {
                     self.mode = Mode::Default
                 } else {
                     self.mode = Mode::Resolve
                 }
+
+                true
             }
-            Msg::Resolve(item) => self.props.resolve_item.emit(item),
+            Msg::Resolve(item) => {
+                self.props.resolve_item.emit(item);
+                false
+            }
         }
-        true
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
