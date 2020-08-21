@@ -1,29 +1,23 @@
 use super::daily::Daily;
+use super::nav::Nav;
+use super::Page;
 use crate::inventory::*;
 use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
-    _link: ComponentLink<Self>,
-    mode: Mode,
+    page: Page,
     repo: Repo,
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<u64>>,
+    nav_to: Option<Callback<Page>>,
 }
 
 pub enum Msg {
     AddItem(Item),
     ResolveItem(u64),
-}
-
-enum Mode {
-    Daily,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Mode::Daily
-    }
+    NavigateTo(Page),
 }
 
 impl Component for App {
@@ -33,17 +27,19 @@ impl Component for App {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
         let resolve_item =
             Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
+        let navigate_to = Some(link.callback(|page| Msg::NavigateTo(page)));
+
         let repo = Repo::new();
         let inventory = repo.read_inventory();
-        let mode = Mode::default();
+        let mode = Page::default();
 
         Self {
-            _link: link,
-            add_item,
-            resolve_item,
-            mode,
+            page: mode,
             repo,
             inventory,
+            add_item,
+            resolve_item,
+            nav_to: navigate_to,
         }
     }
 
@@ -57,6 +53,7 @@ impl Component for App {
                 self.inventory.resolve(utc);
                 self.repo.save_inventory(&self.inventory)
             }
+            Msg::NavigateTo(page) => self.page = page,
         }
         true
     }
@@ -66,8 +63,17 @@ impl Component for App {
     }
 
     fn view(&self) -> Html {
-        match self.mode {
-            Mode::Daily => self.view_daily(),
+        html! {
+            <>
+            {
+                match self.page {
+                    Page::Daily => self.view_daily(),
+                    Page::History => self.view_history(),
+                    Page::Config => self.view_config(),
+                }
+            }
+            { self.view_nav() }
+            </>
         }
     }
 }
@@ -79,6 +85,23 @@ impl App {
                 inventory={self.inventory.today()}
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
+            />
+        }
+    }
+
+    fn view_history(&self) -> Html {
+        html! {<div>{ " HELLO HISTORY " }</div>}
+    }
+
+    fn view_config(&self) -> Html {
+        html! {<div>{ "🚧 Coming soon: config 🚧" }</div>}
+    }
+
+    fn view_nav(&self) -> Html {
+        html! {
+            <Nav
+                page={self.page}
+                nav_to={self.nav_to.as_ref().expect("nav cb")}
             />
         }
     }
