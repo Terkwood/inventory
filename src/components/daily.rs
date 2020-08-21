@@ -11,8 +11,7 @@ pub struct Daily {
 pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
-    HideInventory,
-    ShowInventory,
+    FocusInput,
     ToggleResolveMode,
     Resolve(Item),
 }
@@ -28,6 +27,7 @@ pub struct Props {
 pub enum Mode {
     Default,
     Resolve,
+    Input,
 }
 
 impl Component for Daily {
@@ -46,17 +46,19 @@ impl Component for Daily {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitItem(item_type) => {
-                self.props
-                    .add_item
-                    .emit(Item::new(item_type, self.text_area.clone()));
-                self.text_area.clear();
+                if !self.text_area.is_empty() {
+                    self.props
+                        .add_item
+                        .emit(Item::new(item_type, self.text_area.clone()));
+                    self.text_area.clear();
+                }
+
                 if self.mode != Mode::Default {
                     self.mode = Mode::Default
                 }
             }
             Msg::TextAreaUpdated(text) => self.text_area = text,
-            Msg::HideInventory => (),
-            Msg::ShowInventory => (),
+            Msg::FocusInput => self.mode = Mode::Input,
             Msg::ToggleResolveMode => {
                 if self.mode == Mode::Resolve {
                     self.mode = Mode::Default
@@ -82,7 +84,7 @@ impl Component for Daily {
         html! {
             <>
                 { self.view_input() }
-                { self.view_todays_inventory() }
+                { if self.mode != Mode::Input { self.view_todays_inventory() } else { html! { <></> }}}
             </>
         }
     }
@@ -91,17 +93,16 @@ impl Component for Daily {
 impl Daily {
     pub fn view_input(&self) -> Html {
         html! {
-            <div id="inputgrid">
+            <div id=format!("inputgrid{}", if self.mode == Mode::Input { "full" } else { "mini" })>
                 <div id="bigtextgrid">
                     <textarea
                         value=&self.text_area
-                        onfocus=self.link.callback(|_| Msg::HideInventory)
-                        onchange=self.link.callback(|_| Msg::ShowInventory)
+                        onfocus=self.link.callback(|_| Msg::FocusInput)
                         oninput=self.link.callback(|e: InputData| Msg::TextAreaUpdated(e.value))
                         placeholder="Please take inventory.">
                     </textarea>
                 </div>
-                <div class="center">
+                { if self.mode == Mode::Input { html!{ <div class="center">
                     <button
                         class="bigbutton"
                         onclick=
@@ -112,8 +113,8 @@ impl Daily {
                                     ))>
                         { "Resentment 😠" }
                     </button>
-                </div>
-                <div class="center">
+                </div> }} else { html! { <></> }}}
+                { if self.mode == Mode::Input { html!{ <div class="center">
                     <button
                         class="bigbutton"
                         onclick=
@@ -124,8 +125,8 @@ impl Daily {
                                     ))>
                         { "Fear 😱" }
                     </button>
-                </div>
-                <div class="center">
+                </div>}} else { html! { <></> }}}
+                { if self.mode != Mode::Input { html! { <div class="center">
                     <button
                         class="bigbutton"
                         onclick=
@@ -135,7 +136,7 @@ impl Daily {
                                 )>
                         { "Resolve ✅"}
                     </button>
-                </div>
+                </div> }} else { html! { <></> }}}
             </div>
         }
     }
