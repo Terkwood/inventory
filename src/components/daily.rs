@@ -12,7 +12,7 @@ pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
     FocusInput,
-    ToggleResolveMode,
+    EnterResolveMode(Item),
     Resolve(Item),
 }
 
@@ -26,7 +26,7 @@ pub struct Props {
 #[derive(PartialEq)]
 pub enum Mode {
     Default,
-    Resolve,
+    Resolve(Item),
     Input,
 }
 
@@ -67,11 +67,11 @@ impl Component for Daily {
                 self.mode = Mode::Input;
                 true
             }
-            Msg::ToggleResolveMode => {
-                if self.mode == Mode::Resolve {
+            Msg::EnterResolveMode(item) => {
+                if self.mode == Mode::Resolve(item.clone()) {
                     self.mode = Mode::Default
                 } else {
-                    self.mode = Mode::Resolve
+                    self.mode = Mode::Resolve(item)
                 }
 
                 true
@@ -97,7 +97,6 @@ impl Component for Daily {
             <>
                 { self.view_input() }
                 { self.view_todays_inventory() }
-                { self.view_bottom_controls() }
             </>
         }
     }
@@ -144,15 +143,6 @@ impl Daily {
                         { "Fear 😱" }
                     </button>
                 </div>
-                {   /* TODO: CUT : Hide resolve button when user is typing stuff */
-                    if self.mode != Mode::Input {
-                        html! {
-                            <></>
-                        }
-                    } else {
-                        html! { <></> }
-                    }
-                }
             </div>
         }
     }
@@ -170,7 +160,7 @@ impl Daily {
             <li class="inventoryitem">
                 { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
-                    if self.mode == Mode::Resolve {
+                    if self.mode == Mode::Resolve(item.clone()) {
                         html! {
                             <button
                                 class="resolve"
