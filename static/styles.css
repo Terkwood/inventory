@@ -39,6 +39,10 @@ textarea {
   width: 85%;
 }
 
+.resolve {
+  font-size: 3vh;
+}
+
 #inputgrid {
   height: 35vh;
   display: grid;

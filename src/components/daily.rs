@@ -49,7 +49,10 @@ impl Component for Daily {
                 self.props
                     .add_item
                     .emit(Item::new(item_type, self.text_area.clone()));
-                self.text_area.clear()
+                self.text_area.clear();
+                if self.mode != Mode::Default {
+                    self.mode = Mode::Default
+                }
             }
             Msg::TextAreaUpdated(text) => self.text_area = text,
             Msg::HideInventory => (),
@@ -148,21 +151,19 @@ impl Daily {
     fn view_item(&self, item: Item) -> Html {
         html! {
             <li class="inventoryitem">
-                { format!("{} {}" , item.item_type.emoji, item.text) }
+                { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
                     if self.mode == Mode::Resolve {
                         html! {
-                            <div class="center">
-                                <button
-                                    class="bigbutton"
-                                    onclick=
-                                        self.link
-                                            .callback(
-                                                move |_| Msg::Resolve(item.clone())
-                                            )>
-                                    { "✅"}
-                                </button>
-                            </div>
+                            <button
+                                class="resolve"
+                                onclick=
+                                    self.link
+                                        .callback(
+                                            move |_| Msg::Resolve(item.clone())
+                                        )>
+                                { "✅"}
+                            </button>
                         }
                     } else {
                         html! { <></> }
