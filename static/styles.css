@@ -8,7 +8,7 @@ body {
 textarea {
   width: 100%;
   height: 95%;
-  font-size: 5vw;
+  font-size: 5vh;
 }
 
 .center {
@@ -29,7 +29,7 @@ textarea {
 }
 
 .inventoryitem {
-  font-size: 5vw;
+  font-size: 5vh;
   margin: 1vh;
 }
 
