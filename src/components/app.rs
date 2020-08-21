@@ -6,17 +6,18 @@ use crate::repo::Repo;
 use yew::prelude::*;
 
 pub struct App {
-    _link: ComponentLink<Self>,
     page: Page,
     repo: Repo,
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<u64>>,
+    navigate_to: Option<Callback<Page>>,
 }
 
 pub enum Msg {
     AddItem(Item),
     ResolveItem(u64),
+    NavigateTo(Page),
 }
 
 impl Component for App {
@@ -26,17 +27,19 @@ impl Component for App {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
         let resolve_item =
             Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
+        let navigate_to = Some(link.callback(|page| Msg::NavigateTo(page)));
+
         let repo = Repo::new();
         let inventory = repo.read_inventory();
         let mode = Page::default();
 
         Self {
-            _link: link,
-            add_item,
-            resolve_item,
             page: mode,
             repo,
             inventory,
+            add_item,
+            resolve_item,
+            navigate_to,
         }
     }
 
@@ -50,6 +53,7 @@ impl Component for App {
                 self.inventory.resolve(utc);
                 self.repo.save_inventory(&self.inventory)
             }
+            Msg::NavigateTo(page) => self.page = page,
         }
         true
     }
@@ -86,16 +90,19 @@ impl App {
     }
 
     fn view_history(&self) -> Html {
-        todo!()
+        html! {<div>{ " HELLO HISTORY " }</div>}
     }
 
     fn view_config(&self) -> Html {
-        todo!()
+        html! {<div>{ "🚧 Coming soon: config 🚧" }</div>}
     }
 
     fn view_nav(&self) -> Html {
         html! {
-            <Nav page={self.page}/>
+            <Nav
+                page={self.page}
+                nav_to={self.navigate_to.as_ref().expect("nav cb")}
+            />
         }
     }
 }
