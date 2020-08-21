@@ -139,7 +139,6 @@ impl Daily {
     fn view_todays_inventory(&self) -> Html {
         html! {
             <div id="inventory">
-                { if self.mode == Mode::Resolve { html!{<>{"RESOLVE"}</>} } else { html!{<></>} }}
                 <ul>
                     { self.props.inventory.items.iter().map(|item| self.view_item(item.clone())).collect::<Html>() }
                 </ul>
