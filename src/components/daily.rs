@@ -47,18 +47,16 @@ impl Component for Daily {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitItem(item_type) => {
+                self.mode = Mode::Default;
                 if !self.text_area.is_empty() {
                     self.props
                         .add_item
                         .emit(Item::new(item_type, self.text_area.clone()));
                     self.text_area.clear();
-                    /*if self.mode != Mode::Default {
-                        self.mode = Mode::Default
-                    }*/
+
                     false
                 } else {
                     // just get out of the input area
-                    self.mode = Mode::Default;
                     true
                 }
             }
