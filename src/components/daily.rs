@@ -12,7 +12,6 @@ pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
     FocusInput,
-    //LeaveInput,
     ToggleResolveMode,
     Resolve(Item),
 }
@@ -99,7 +98,6 @@ impl Daily {
                     <textarea
                         value=&self.text_area
                         onfocus=self.link.callback(|_| Msg::FocusInput)
-                        //onchange=self.link.callback(|_| Msg::LeaveInput)
                         oninput=self.link.callback(|e: InputData| Msg::TextAreaUpdated(e.value))
                         placeholder="Please take inventory.">
                     </textarea>
