@@ -9,15 +9,25 @@ pub struct App {
     page: Page,
     repo: Repo,
     inventory: Inventory,
+    nav_state: NavState,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<u64>>,
     nav_to: Option<Callback<Page>>,
+    hide_nav: Option<Callback<()>>,
+    show_nav: Option<Callback<()>>,
 }
 
+#[derive(PartialEq)]
+pub enum NavState {
+    Visible,
+    Hidden,
+}
 pub enum Msg {
     AddItem(Item),
     ResolveItem(u64),
     NavigateTo(Page),
+    HideNav,
+    ShowNav,
 }
 
 impl Component for App {
@@ -27,19 +37,24 @@ impl Component for App {
         let add_item = Some(link.callback(|item| Msg::AddItem(item)));
         let resolve_item =
             Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
-        let navigate_to = Some(link.callback(|page| Msg::NavigateTo(page)));
+        let nav_to = Some(link.callback(|page| Msg::NavigateTo(page)));
+        let hide_nav = Some(link.callback(|_| Msg::HideNav));
+        let show_nav = Some(link.callback(|_| Msg::ShowNav));
 
         let repo = Repo::new();
         let inventory = repo.read_inventory();
-        let mode = Page::default();
+        let page = Page::default();
 
         Self {
-            page: mode,
+            page,
             repo,
             inventory,
             add_item,
             resolve_item,
-            nav_to: navigate_to,
+            nav_state: NavState::Visible,
+            nav_to,
+            hide_nav,
+            show_nav,
         }
     }
 
@@ -54,6 +69,8 @@ impl Component for App {
                 self.repo.save_inventory(&self.inventory)
             }
             Msg::NavigateTo(page) => self.page = page,
+            Msg::HideNav => self.nav_state = NavState::Hidden,
+            Msg::ShowNav => self.nav_state = NavState::Visible,
         }
         true
     }
@@ -85,6 +102,9 @@ impl App {
                 inventory={self.inventory.today()}
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
+                hide_nav={self.hide_nav.as_ref().expect("hide nav cb")}
+                show_nav={self.show_nav.as_ref().expect("show nav cb")}
+
             />
         }
     }
@@ -98,11 +118,15 @@ impl App {
     }
 
     fn view_nav(&self) -> Html {
-        html! {
-            <Nav
-                page={self.page}
-                nav_to={self.nav_to.as_ref().expect("nav cb")}
-            />
+        if self.nav_state == NavState::Visible {
+            html! {
+                <Nav
+                    page={self.page}
+                    nav_to={self.nav_to.as_ref().expect("nav cb")}
+                />
+            }
+        } else {
+            html! { <></> }
         }
     }
 }

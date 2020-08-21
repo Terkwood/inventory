@@ -21,6 +21,8 @@ pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
     pub resolve_item: Callback<u64>,
+    pub hide_nav: Callback<()>,
+    pub show_nav: Callback<()>,
 }
 
 #[derive(PartialEq)]
@@ -47,6 +49,7 @@ impl Component for Daily {
         match msg {
             Msg::SubmitItem(item_type) => {
                 self.mode = Mode::Default;
+                self.props.show_nav.emit(());
                 if !self.text_area.is_empty() {
                     self.props
                         .add_item
@@ -65,6 +68,7 @@ impl Component for Daily {
             }
             Msg::FocusInput => {
                 self.mode = Mode::Input;
+                self.props.hide_nav.emit(());
                 true
             }
             Msg::EnterResolveMode(item_epoch_ms_utc) => {
@@ -73,7 +77,7 @@ impl Component for Daily {
                 } else {
                     self.mode = Mode::Resolve(item_epoch_ms_utc)
                 }
-
+                self.props.show_nav.emit(());
                 true
             }
             Msg::Resolve(item_epoch_millis_utc) => {
