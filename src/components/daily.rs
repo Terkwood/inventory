@@ -12,7 +12,6 @@ pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
     FocusInput,
-    LeaveInput,
     ToggleResolveMode,
     Resolve(Item),
 }
@@ -68,10 +67,6 @@ impl Component for Daily {
                 self.mode = Mode::Input;
                 true
             }
-            Msg::LeaveInput => {
-                self.mode = Mode::Default;
-                true
-            }
             Msg::ToggleResolveMode => {
                 if self.mode == Mode::Resolve {
                     self.mode = Mode::Default
@@ -102,6 +97,7 @@ impl Component for Daily {
             <>
                 { self.view_input() }
                 { self.view_todays_inventory() }
+                { self.view_bottom_controls() }
             </>
         }
     }
@@ -120,7 +116,6 @@ impl Daily {
                     <textarea
                         value=&self.text_area
                         onfocus=self.link.callback(|_| Msg::FocusInput)
-                        /*onchange=self.link.callback(|_| Msg::LeaveInput)*/
                         oninput=self.link.callback(|e: InputData| Msg::TextAreaUpdated(e.value))
                         placeholder="Please take inventory.">
                     </textarea>
@@ -149,17 +144,15 @@ impl Daily {
                         { "Fear 😱" }
                     </button>
                 </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::ToggleResolveMode
-                                )>
-                        { "Resolve ✅"}
-                    </button>
-                </div>
+                {   /* TODO: CUT : Hide resolve button when user is typing stuff */
+                    if self.mode != Mode::Input {
+                        html! {
+                            <></>
+                        }
+                    } else {
+                        html! { <></> }
+                    }
+                }
             </div>
         }
     }
