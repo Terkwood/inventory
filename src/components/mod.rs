@@ -4,8 +4,6 @@ mod nav;
 
 pub use app::App;
 
-use std::fmt;
-
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Page {
     Daily,
@@ -45,17 +43,6 @@ fn order_pos(page: Page) -> usize {
         .find(|(_pos, that)| **that == page)
         .map(|(pos, _)| pos)
         .unwrap_or_default()
-}
-
-impl fmt::Display for Page {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let text = match self {
-            Page::Daily => "📃 Daily",
-            Page::History => "📚 History",
-            Page::Config => "🛠 Config",
-        };
-        write!(f, "{}", text)
-    }
 }
 
 #[cfg(test)]
