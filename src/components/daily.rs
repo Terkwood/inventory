@@ -14,12 +14,14 @@ pub enum Msg {
     HideInventory,
     ShowInventory,
     ToggleResolveMode,
+    Resolve(Item),
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
+    pub resolve_item: Callback<Item>,
 }
 
 #[derive(PartialEq)]
@@ -59,6 +61,7 @@ impl Component for Daily {
                     self.mode = Mode::Resolve
                 }
             }
+            Msg::Resolve(item) => self.props.resolve_item.emit(item),
         }
         true
     }
@@ -97,7 +100,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="itembutton"
+                        class="bigbutton"
                         onclick=
                             self.link
                                 .callback(
@@ -109,7 +112,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="itembutton"
+                        class="bigbutton"
                         onclick=
                             self.link
                                 .callback(
@@ -121,7 +124,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="itembutton"
+                        class="bigbutton"
                         onclick=
                             self.link
                                 .callback(
@@ -133,21 +136,40 @@ impl Daily {
             </div>
         }
     }
-    pub fn view_todays_inventory(&self) -> Html {
+    fn view_todays_inventory(&self) -> Html {
         html! {
             <div id="inventory">
                 { if self.mode == Mode::Resolve { html!{<>{"RESOLVE"}</>} } else { html!{<></>} }}
                 <ul>
-                    { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
+                    { self.props.inventory.items.iter().map(|item| self.view_item(item.clone())).collect::<Html>() }
                 </ul>
             </div>
         }
     }
-}
-fn view_item(item: &Item) -> Html {
-    html! {
-        <li class="inventoryitem">
-            { format!("{} {}" , item.item_type.emoji, item.text) }
-        </li>
+    fn view_item(&self, item: Item) -> Html {
+        html! {
+            <li class="inventoryitem">
+                { format!("{} {}" , item.item_type.emoji, item.text) }
+                {
+                    if self.mode == Mode::Resolve {
+                        html! {
+                            <div class="center">
+                                <button
+                                    class="bigbutton"
+                                    onclick=
+                                        self.link
+                                            .callback(
+                                                move |_| Msg::Resolve(item.clone())
+                                            )>
+                                    { "✅"}
+                                </button>
+                            </div>
+                        }
+                    } else {
+                        html! { <></> }
+                    }
+                }
+            </li>
+        }
     }
 }
