@@ -11,7 +11,7 @@ pub struct App {
     inventory: Inventory,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<u64>>,
-    navigate_to: Option<Callback<Page>>,
+    nav_to: Option<Callback<Page>>,
 }
 
 pub enum Msg {
@@ -39,7 +39,7 @@ impl Component for App {
             inventory,
             add_item,
             resolve_item,
-            navigate_to,
+            nav_to: navigate_to,
         }
     }
 
@@ -101,7 +101,7 @@ impl App {
         html! {
             <Nav
                 page={self.page}
-                nav_to={self.navigate_to.as_ref().expect("nav cb")}
+                nav_to={self.nav_to.as_ref().expect("nav cb")}
             />
         }
     }
