@@ -5,6 +5,7 @@ pub struct Daily {
     link: ComponentLink<Self>,
     props: Props,
     text_area: String,
+    mode: Mode,
 }
 
 pub enum Msg {
@@ -12,12 +13,21 @@ pub enum Msg {
     TextAreaUpdated(String),
     HideInventory,
     ShowInventory,
+    ToggleResolveMode,
+    Resolve(Item),
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
+    pub resolve_item: Callback<Item>,
+}
+
+#[derive(PartialEq)]
+pub enum Mode {
+    Default,
+    Resolve,
 }
 
 impl Component for Daily {
@@ -29,6 +39,7 @@ impl Component for Daily {
             link,
             props,
             text_area,
+            mode: Mode::Default,
         }
     }
 
@@ -38,11 +49,22 @@ impl Component for Daily {
                 self.props
                     .add_item
                     .emit(Item::new(item_type, self.text_area.clone()));
-                self.text_area.clear()
+                self.text_area.clear();
+                if self.mode != Mode::Default {
+                    self.mode = Mode::Default
+                }
             }
             Msg::TextAreaUpdated(text) => self.text_area = text,
             Msg::HideInventory => (),
             Msg::ShowInventory => (),
+            Msg::ToggleResolveMode => {
+                if self.mode == Mode::Resolve {
+                    self.mode = Mode::Default
+                } else {
+                    self.mode = Mode::Resolve
+                }
+            }
+            Msg::Resolve(item) => self.props.resolve_item.emit(item),
         }
         true
     }
@@ -81,7 +103,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="itembutton"
+                        class="bigbutton"
                         onclick=
                             self.link
                                 .callback(
@@ -93,7 +115,7 @@ impl Daily {
                 </div>
                 <div class="center">
                     <button
-                        class="itembutton"
+                        class="bigbutton"
                         onclick=
                             self.link
                                 .callback(
@@ -103,23 +125,51 @@ impl Daily {
                         { "Fear 😱" }
                     </button>
                 </div>
+                <div class="center">
+                    <button
+                        class="bigbutton"
+                        onclick=
+                            self.link
+                                .callback(
+                                    |_| Msg::ToggleResolveMode
+                                )>
+                        { "Resolve ✅"}
+                    </button>
+                </div>
             </div>
         }
     }
-    pub fn view_todays_inventory(&self) -> Html {
+    fn view_todays_inventory(&self) -> Html {
         html! {
             <div id="inventory">
                 <ul>
-                    { self.props.inventory.items.iter().map(view_item).collect::<Html>() }
+                    { self.props.inventory.items.iter().map(|item| self.view_item(item.clone())).collect::<Html>() }
                 </ul>
             </div>
         }
     }
-}
-fn view_item(item: &Item) -> Html {
-    html! {
-        <li class="inventoryitem">
-            { format!("{} {}" , item.item_type.emoji, item.text) }
-        </li>
+    fn view_item(&self, item: Item) -> Html {
+        html! {
+            <li class="inventoryitem">
+                { format!("{} {} " , item.item_type.emoji, item.text) }
+                {
+                    if self.mode == Mode::Resolve {
+                        html! {
+                            <button
+                                class="resolve"
+                                onclick=
+                                    self.link
+                                        .callback(
+                                            move |_| Msg::Resolve(item.clone())
+                                        )>
+                                { "✅"}
+                            </button>
+                        }
+                    } else {
+                        html! { <></> }
+                    }
+                }
+            </li>
+        }
     }
 }

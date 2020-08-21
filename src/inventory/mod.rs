@@ -26,6 +26,10 @@ impl Inventory {
     pub fn add(&mut self, item: Item) {
         self.items.push(item)
     }
+
+    pub fn resolve(&mut self, item: Item) {
+        self.items.retain(|i| i != &item)
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
