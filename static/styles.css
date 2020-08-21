@@ -43,12 +43,22 @@ textarea {
   font-size: 3vw;
 }
 
-#inputgrid {
+
+#inputgridwaiting {
   height: 35vh;
   display: grid;
   grid-gap: 5px;
   grid-template: repeat(7, 1fr) / repeat(2, 1fr);
   grid-auto-flow: row;
+}
+#inputgridfocus {
+  height: 100vh;
+  display: grid;
+  grid-gap: 5px;
+  grid-template: repeat(7, 1fr) / repeat(2, 1fr);
+  grid-auto-flow: row;
+  position: fixed;
+  top: 0;
 }
 
 #bigtextgrid {
