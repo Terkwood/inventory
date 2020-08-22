@@ -36,7 +36,10 @@ impl Inventory {
     }
 
     pub fn today(&self, now: UtcMillis, offset: FixedOffset) -> Self {
-        let local_now_date = offset.timestamp_millis(now.0 as i64).date();
+        let local_now_date = Utc
+            .timestamp_millis(now.0 as i64)
+            .with_timezone(&offset)
+            .date();
         let items = self
             .items
             .iter()
