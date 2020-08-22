@@ -1,6 +1,5 @@
 pub mod history;
 
-use crate::time::*;
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
 
@@ -43,7 +42,12 @@ impl Inventory {
         let items = self
             .items
             .iter()
-            .filter(|item| same_date(UtcMillis(item.epoch_millis_utc), local_now_date, offset))
+            .filter(|item| {
+                Utc.timestamp_millis(item.epoch_millis_utc as i64)
+                    .with_timezone(&offset)
+                    .date()
+                    == local_now_date
+            })
             .cloned()
             .collect();
         Inventory { items }
