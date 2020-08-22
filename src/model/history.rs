@@ -81,5 +81,9 @@ mod test {
         let history = History::from(inventory, FixedOffset::west(LOCAL_OFFSET_SECONDS));
 
         assert_eq!(history.days.len(), size as usize);
+        for day in history.days {
+            assert_eq!(day.inventory.items.len(), 1)
+        }
+        assert_eq!(history.offset, FixedOffset::west(LOCAL_OFFSET_SECONDS))
     }
 }
