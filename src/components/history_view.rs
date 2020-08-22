@@ -40,11 +40,15 @@ impl Component for HistoryView {
     }
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Resolve(epoch) => self.props.resolve_item.emit(epoch),
-            Msg::EnterResolveMode(epoch) => self.mode = Mode::Resolve(epoch),
+            Msg::Resolve(epoch) => {
+                self.props.resolve_item.emit(epoch);
+                false
+            }
+            Msg::EnterResolveMode(epoch) => {
+                self.mode = Mode::Resolve(epoch);
+                true
+            }
         }
-
-        false
     }
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         if self.props != props {
