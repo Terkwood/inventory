@@ -13,15 +13,15 @@ pub enum Msg {
     SubmitItem(ItemType),
     TextAreaUpdated(String),
     FocusInput,
-    EnterResolveMode(u64),
-    Resolve(u64),
+    EnterResolveMode(UtcMillis),
+    Resolve(UtcMillis),
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
     pub add_item: Callback<Item>,
-    pub resolve_item: Callback<u64>,
+    pub resolve_item: Callback<UtcMillis>,
     pub hide_nav: Callback<()>,
     pub show_nav: Callback<()>,
 }
@@ -29,7 +29,7 @@ pub struct Props {
 #[derive(PartialEq)]
 pub enum Mode {
     Default,
-    Resolve(u64),
+    Resolve(UtcMillis),
     Input,
 }
 
@@ -164,19 +164,19 @@ impl Daily {
         }
     }
     fn view_item(&self, item: Item) -> Html {
-        let utc_ms = item.epoch_millis_utc;
+        let utc_ms = UtcMillis(item.epoch_millis_utc);
         html! {
             <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(utc_ms))}>
                 { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
-                    if self.mode == Mode::Resolve(item.epoch_millis_utc) {
+                    if self.mode == Mode::Resolve(utc_ms) {
                         html! {
                             <button
                                 class="resolve"
                                 onclick=
                                     self.link
                                         .callback(
-                                            move |_| Msg::Resolve(item.epoch_millis_utc)
+                                            move |_| Msg::Resolve(utc_ms)
                                         )>
                                 { "✅"}
                             </button>

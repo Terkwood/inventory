@@ -1,6 +1,6 @@
 use super::daily::Daily;
-use super::history::HistoryView;
-use super::nav::Nav;
+use super::HistoryView;
+use super::Nav;
 use super::Page;
 use crate::model::*;
 use crate::repo::Repo;
@@ -12,7 +12,7 @@ pub struct App {
     inventory: Inventory,
     nav_state: NavState,
     add_item: Option<Callback<Item>>,
-    resolve_item: Option<Callback<u64>>,
+    resolve_item: Option<Callback<UtcMillis>>,
     nav_to: Option<Callback<Page>>,
     hide_nav: Option<Callback<()>>,
     show_nav: Option<Callback<()>>,
@@ -25,7 +25,7 @@ pub enum NavState {
 }
 pub enum Msg {
     AddItem(Item),
-    ResolveItem(u64),
+    ResolveItem(UtcMillis),
     NavigateTo(Page),
     HideNav,
     ShowNav,
@@ -66,7 +66,7 @@ impl Component for App {
                 self.repo.save_inventory(&self.inventory)
             }
             Msg::ResolveItem(utc) => {
-                self.inventory.resolve(utc);
+                self.inventory.resolve(utc.0);
                 self.repo.save_inventory(&self.inventory)
             }
             Msg::NavigateTo(page) => self.page = page,

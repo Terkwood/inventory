@@ -1,9 +1,11 @@
 mod app;
 mod daily;
-mod history;
+mod history_view;
 mod nav;
 
 pub use app::App;
+pub use history_view::HistoryView;
+pub use nav::Nav;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Page {

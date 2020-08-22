@@ -12,7 +12,7 @@ pub struct HistoryView {
 }
 #[derive(PartialEq, Properties, Clone)]
 pub struct Props {
-    pub resolve_item: Callback<u64>,
+    pub resolve_item: Callback<UtcMillis>,
     pub inventory: Inventory,
 }
 pub enum Msg {
@@ -40,7 +40,7 @@ impl Component for HistoryView {
     }
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Resolve(epoch) => self.props.resolve_item.emit(epoch.0),
+            Msg::Resolve(epoch) => self.props.resolve_item.emit(epoch),
             Msg::EnterResolveMode(epoch) => self.mode = Mode::Resolve(epoch),
         }
 
