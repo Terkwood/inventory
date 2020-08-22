@@ -8,6 +8,7 @@ pub struct HistoryView {
     pub link: ComponentLink<Self>,
     pub props: Props,
     pub history: History,
+    pub mode: Mode,
 }
 #[derive(PartialEq, Properties, Clone)]
 pub struct Props {
@@ -15,7 +16,14 @@ pub struct Props {
     pub inventory: Inventory,
 }
 pub enum Msg {
-    Resolve(Item),
+    Resolve(UtcMillis),
+    EnterResolveMode(UtcMillis),
+}
+
+#[derive(PartialEq)]
+pub enum Mode {
+    View,
+    Resolve(UtcMillis),
 }
 
 impl Component for HistoryView {
@@ -27,11 +35,13 @@ impl Component for HistoryView {
             props,
             link,
             history,
+            mode: Mode::View,
         }
     }
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Resolve(item) => self.props.resolve_item.emit(item.epoch_millis_utc),
+            Msg::Resolve(epoch) => self.props.resolve_item.emit(epoch.0),
+            Msg::EnterResolveMode(epoch) => self.mode = Mode::Resolve(epoch),
         }
 
         false
@@ -55,13 +65,47 @@ impl Component for HistoryView {
             <div id="history" style=style>
             {
                 self.history.days.iter()
-                    .map(view_day)
+                    .map(|day|self.view_day(day))
                     .collect::<Html>()
             }
             </div>
         }
     }
 }
-fn view_day(day: &Day) -> Html {
-    html! { <div><h1>{ day.date.format("%A, %b %e, %Y") }</h1>{ "a day "}</div> }
+
+impl HistoryView {
+    fn view_day(&self, day: &Day) -> Html {
+        html! {
+            <div>
+                <h1>{ day.date.format("%A, %b %e, %Y") }</h1>
+                <ul>{ day.inventory.items.iter().map(|item| self.view_item(item)).collect::<Html>() }</ul>
+            </div>
+        }
+    }
+
+    fn view_item(&self, item: &Item) -> Html {
+        let epoch = UtcMillis(item.epoch_millis_utc);
+        html! {
+            <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(epoch))}>
+                { format!("{} {} " , item.item_type.emoji, item.text) }
+                {
+                    if self.mode == Mode::Resolve(epoch) {
+                        html! {
+                            <button
+                                class="resolve"
+                                onclick=
+                                    self.link
+                                        .callback(
+                                            move |_| Msg::Resolve(epoch)
+                                        )>
+                                { "✅"}
+                            </button>
+                        }
+                    } else {
+                        html! { <></> }
+                    }
+                }
+            </li>
+        }
+    }
 }

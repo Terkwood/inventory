@@ -164,9 +164,9 @@ impl Daily {
         }
     }
     fn view_item(&self, item: Item) -> Html {
-        let epoch_ms = item.epoch_millis_utc;
+        let utc_ms = item.epoch_millis_utc;
         html! {
-            <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(epoch_ms))}>
+            <li class="inventoryitem" onclick={self.link.callback(move |_| Msg::EnterResolveMode(utc_ms))}>
                 { format!("{} {} " , item.item_type.emoji, item.text) }
                 {
                     if self.mode == Mode::Resolve(item.epoch_millis_utc) {

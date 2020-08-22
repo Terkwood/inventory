@@ -9,6 +9,27 @@ pub struct Inventory {
     pub items: Vec<Item>,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct Item {
+    pub epoch_millis_utc: u64,
+    pub item_type: ItemType,
+    pub text: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct ItemType {
+    pub name: String,
+    pub emoji: String,
+}
+
+pub enum DefaultItemType {
+    Resentment,
+    Fear,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub struct UtcMillis(pub u64);
+
 impl Inventory {
     pub fn empty() -> Self {
         Self { items: vec![] }
@@ -35,13 +56,6 @@ impl Inventory {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
-pub struct Item {
-    pub epoch_millis_utc: u64,
-    pub item_type: ItemType,
-    pub text: String,
-}
-
 impl Item {
     pub fn new(item_type: ItemType, text: String, now: u64) -> Self {
         Item {
@@ -50,17 +64,6 @@ impl Item {
             text,
         }
     }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
-pub struct ItemType {
-    pub name: String,
-    pub emoji: String,
-}
-
-pub enum DefaultItemType {
-    Resentment,
-    Fear,
 }
 
 impl DefaultItemType {
