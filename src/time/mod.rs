@@ -1,8 +1,8 @@
 use crate::model::UtcMillis;
 use chrono::prelude::*;
 
-pub fn same_date_utc(epoch_millis_utc: u64, given: Date<Utc>) -> bool {
-    Utc.timestamp_millis(epoch_millis_utc as i64).date() == given
+pub fn same_date(epoch: UtcMillis, given: Date<FixedOffset>, offset: FixedOffset) -> bool {
+    offset.timestamp_millis(epoch.0 as i64).date() == given
 }
 
 pub fn js_utc_now() -> UtcMillis {
