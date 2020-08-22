@@ -1,5 +1,6 @@
 use crate::model::Inventory;
 use chrono::prelude::*;
+use std::time::Duration;
 
 pub struct History {
     pub days: Vec<Inventory>,
@@ -33,25 +34,29 @@ where
 
 #[cfg(test)]
 mod test {
+
     use super::*;
     use crate::model::*;
 
+    fn make_time(days: u32) -> DateTime<Utc> {
+        Utc.ymd(2020, 08, days + 1).and_hms(0, 0, 0)
+    }
+
     #[test]
     fn test_grouping() {
-        let now = Utc::now();
-
         let item_type = crate::model::DefaultItemType::Resentment.instance();
 
-        let mut items = vec![];
+        let items = &mut vec![];
         for i in 0..10 {
-            let time: DateTime<Utc> = todo!();
             items.push(Item::new(
-                item_type,
+                item_type.clone(),
                 "nil".to_string(),
-                time.timestamp_millis() as u64,
+                make_time(i).timestamp_millis() as u64,
             ))
         }
-        let inventory = Inventory { items };
+        let inventory = Inventory {
+            items: items.clone(),
+        };
 
         println!("{:?}", inventory);
 
