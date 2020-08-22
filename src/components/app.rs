@@ -1,4 +1,5 @@
 use super::daily::Daily;
+use super::history::HistoryView;
 use super::nav::Nav;
 use super::Page;
 use crate::model::*;
@@ -110,7 +111,12 @@ impl App {
     }
 
     fn view_history(&self) -> Html {
-        html! {<div>{ " HELLO HISTORY " }</div>}
+        html! {
+            <HistoryView
+                resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
+                inventory={self.inventory.clone()}
+            />
+        }
     }
 
     fn view_config(&self) -> Html {

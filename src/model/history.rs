@@ -14,16 +14,19 @@ pub struct Day {
 
 impl History {
     /// Group the given inventory by day, for a given offset(timezone).
-    pub fn from(inventory: Inventory, offset: FixedOffset) -> Self {
-        let days = group_by(inventory.items, |mr| {
+    pub fn from(inventory: &Inventory, offset: FixedOffset) -> Self {
+        let days: Vec<Day> = group_by(&inventory.items, |mr| {
             Utc.timestamp_millis(mr.epoch_millis_utc as i64)
                 .with_timezone(&offset)
                 .date()
         })
         .iter()
-        .map(|d| Day {
-            date: d.0,
-            inventory: Inventory { items: d.clone().1 },
+        .map(|d| {
+            let items = d.1.iter().map(|&i| i.clone()).collect();
+            Day {
+                date: d.0,
+                inventory: Inventory { items },
+            }
         })
         .collect();
         Self { days, offset }
@@ -78,7 +81,7 @@ mod test {
             items: items.clone(),
         };
 
-        let history = History::from(inventory, FixedOffset::west(LOCAL_OFFSET_SECONDS));
+        let history = History::from(&inventory, FixedOffset::west(LOCAL_OFFSET_SECONDS));
 
         assert_eq!(history.days.len(), size as usize);
         for day in history.days {
