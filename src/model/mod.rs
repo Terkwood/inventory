@@ -1,6 +1,5 @@
 pub mod history;
 
-use crate::time::*;
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
 
@@ -35,12 +34,20 @@ impl Inventory {
         Self { items: vec![] }
     }
 
-    pub fn today(&self) -> Self {
-        let utc_now_date = Utc.timestamp_millis(js_utc_now().0 as i64).date();
+    pub fn today(&self, now: UtcMillis, offset: FixedOffset) -> Self {
+        let local_now_date = Utc
+            .timestamp_millis(now.0 as i64)
+            .with_timezone(&offset)
+            .date();
         let items = self
             .items
             .iter()
-            .filter(|item| same_date_utc(item.epoch_millis_utc, utc_now_date))
+            .filter(|item| {
+                Utc.timestamp_millis(item.epoch_millis_utc as i64)
+                    .with_timezone(&offset)
+                    .date()
+                    == local_now_date
+            })
             .cloned()
             .collect();
         Inventory { items }

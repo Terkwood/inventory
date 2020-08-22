@@ -4,6 +4,7 @@ use super::Nav;
 use super::Page;
 use crate::model::*;
 use crate::repo::Repo;
+use crate::time::{js_local_offset, js_utc_now};
 use yew::prelude::*;
 
 pub struct App {
@@ -100,12 +101,11 @@ impl App {
     fn view_daily(&self) -> Html {
         html! {
             <Daily
-                inventory={self.inventory.today()}
+                inventory={self.inventory.today(js_utc_now(), js_local_offset())}
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
                 hide_nav={self.hide_nav.as_ref().expect("hide nav cb")}
                 show_nav={self.show_nav.as_ref().expect("show nav cb")}
-
             />
         }
     }
