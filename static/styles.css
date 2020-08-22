@@ -84,7 +84,6 @@ textarea {
 }
 
 #history {
-  height: 100vh;
   display: grid;
   grid-gap: 5px;
   grid-auto-flow: row;
