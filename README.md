@@ -14,10 +14,7 @@ Nevertheless, as long as you have control of your device and feel confident that
 
 This app will _never_ transmit your data to any other website, server, or collection facility.
 
-## 4th Step
+## Steps addressed
 
-"We made a searching and fearless moral inventory of ourselves."
-
-## 10th Step
-
-"Continued to take personal inventory and when we were wrong promptly admitted it."
+- 4th Step. "We made a searching and fearless moral inventory of ourselves."
+- 10th Step. "Continued to take personal inventory and when we were wrong promptly admitted it."
