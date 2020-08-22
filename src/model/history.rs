@@ -4,12 +4,14 @@ use std::time::Duration;
 
 pub struct History {
     pub days: Vec<Inventory>,
+    pub offset: FixedOffset,
 }
 
 impl History {
     /// Group the given inventory by day, for a given offset(timezone).
     pub fn from(inventory: Inventory, offset: FixedOffset) -> Self {
-        todo!()
+        let days = todo!();
+        Self { days, offset }
     }
 }
 
@@ -46,8 +48,9 @@ mod test {
     fn test_grouping() {
         let item_type = crate::model::DefaultItemType::Resentment.instance();
 
+        let size = 10;
         let items = &mut vec![];
-        for i in 0..10 {
+        for i in 0..size {
             items.push(Item::new(
                 item_type.clone(),
                 "nil".to_string(),
@@ -58,8 +61,8 @@ mod test {
             items: items.clone(),
         };
 
-        println!("{:?}", inventory);
+        let history = History::from(inventory, todo!());
 
-        todo!()
+        assert_eq!(history.days.len(), size as usize);
     }
 }
