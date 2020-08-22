@@ -4,7 +4,8 @@ description = "Track inventory for your 12-step program"
 edition = "2018"
 license = "MIT"
 name = "inventory"
-version = "0.3.0-c"
+repository = "https://github.com/Terkwood/inventory"
+version = "0.3.0-d"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
