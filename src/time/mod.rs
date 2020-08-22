@@ -1,11 +1,12 @@
+use crate::model::UtcMillis;
 use chrono::prelude::*;
 
 pub fn same_date_utc(epoch_millis_utc: u64, given: Date<Utc>) -> bool {
     Utc.timestamp_millis(epoch_millis_utc as i64).date() == given
 }
 
-pub fn js_utc_now() -> u64 {
-    js_sys::Date::now() as u64
+pub fn js_utc_now() -> UtcMillis {
+    UtcMillis(js_sys::Date::now() as u64)
 }
 
 /// computes a western-biased FixedOffset using the JS runtime

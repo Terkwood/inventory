@@ -36,7 +36,7 @@ impl Inventory {
     }
 
     pub fn today(&self) -> Self {
-        let utc_now_date = Utc.timestamp_millis(js_utc_now() as i64).date();
+        let utc_now_date = Utc.timestamp_millis(js_utc_now().0 as i64).date();
         let items = self
             .items
             .iter()
@@ -57,9 +57,9 @@ impl Inventory {
 }
 
 impl Item {
-    pub fn new(item_type: ItemType, text: String, now: u64) -> Self {
+    pub fn new(item_type: ItemType, text: String, now: UtcMillis) -> Self {
         Item {
-            epoch_millis_utc: now,
+            epoch_millis_utc: now.0,
             item_type,
             text,
         }

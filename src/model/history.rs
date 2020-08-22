@@ -73,7 +73,7 @@ mod test {
             items.push(Item::new(
                 item_type.clone(),
                 "nil".to_string(),
-                make_time(i).timestamp_millis() as u64,
+                UtcMillis(make_time(i).timestamp_millis() as u64),
             ))
         }
         let inventory = Inventory {
