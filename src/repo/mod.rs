@@ -1,4 +1,4 @@
-use crate::inventory::Inventory;
+use crate::model::Inventory;
 use yew::format::Json;
 use yew::services::storage::{Area, StorageService};
 

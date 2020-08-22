@@ -3,7 +3,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 mod components;
-mod inventory;
+mod model;
 mod repo;
 mod time;
 
