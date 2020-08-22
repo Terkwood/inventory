@@ -1,5 +1,6 @@
 use crate::model::history::*;
 use crate::model::*;
+use crate::time::js_local_offset;
 
 use yew::prelude::*;
 
@@ -21,7 +22,7 @@ impl Component for HistoryView {
     type Message = Msg;
     type Properties = Props;
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        let history = History::from(&props.inventory, todo!());
+        let history = History::from(&props.inventory, js_local_offset());
         Self {
             props,
             link,
@@ -37,7 +38,7 @@ impl Component for HistoryView {
     }
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         if self.props != props {
-            self.history = History::from(&props.inventory, todo!());
+            self.history = History::from(&props.inventory, js_local_offset());
             self.props = props;
             true
         } else {
@@ -45,6 +46,17 @@ impl Component for HistoryView {
         }
     }
     fn view(&self) -> Html {
-        todo!()
+        html! {
+            <>
+            {
+                self.history.days.iter()
+                    .map(view_day)
+                    .collect::<Html>()
+            }
+            </>
+        }
     }
+}
+fn view_day(day: &Day) -> Html {
+    html! { <div>{ "a day "}</div> }
 }

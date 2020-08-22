@@ -1,6 +1,5 @@
 use crate::model::Inventory;
 use chrono::prelude::*;
-use std::time::Duration;
 
 pub struct History {
     pub days: Vec<Day>,
