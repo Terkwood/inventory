@@ -82,3 +82,12 @@ textarea {
   grid-column: 1 / span 2;
   grid-row: 1 / span 5;
 }
+
+
+
+#history {
+  height: 100vh;
+  display: grid;
+  grid-gap: 5px;
+  grid-auto-flow: row;
+}
