@@ -1,5 +1,6 @@
 mod app;
 mod daily;
+mod history;
 mod nav;
 
 pub use app::App;
