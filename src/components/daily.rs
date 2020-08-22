@@ -1,4 +1,5 @@
-use crate::inventory::*;
+use crate::model::*;
+use crate::time::js_utc_now;
 use yew::prelude::*;
 
 pub struct Daily {
@@ -51,9 +52,11 @@ impl Component for Daily {
                 self.mode = Mode::Default;
                 self.props.show_nav.emit(());
                 if !self.text_area.is_empty() {
-                    self.props
-                        .add_item
-                        .emit(Item::new(item_type, self.text_area.clone()));
+                    self.props.add_item.emit(Item::new(
+                        item_type,
+                        self.text_area.clone(),
+                        js_utc_now(),
+                    ));
                     self.text_area.clear();
 
                     false

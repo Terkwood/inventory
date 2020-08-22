@@ -1,7 +1,7 @@
 use super::daily::Daily;
 use super::nav::Nav;
 use super::Page;
-use crate::inventory::*;
+use crate::model::*;
 use crate::repo::Repo;
 use yew::prelude::*;
 

@@ -1,3 +1,7 @@
+mod history;
+
+pub use history::History;
+
 use crate::time::*;
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
@@ -41,9 +45,9 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(item_type: ItemType, text: String) -> Self {
+    pub fn new(item_type: ItemType, text: String, now: u64) -> Self {
         Item {
-            epoch_millis_utc: js_utc_now(),
+            epoch_millis_utc: now,
             item_type,
             text,
         }
