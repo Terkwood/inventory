@@ -63,5 +63,5 @@ impl Component for HistoryView {
     }
 }
 fn view_day(day: &Day) -> Html {
-    html! { <div>{ "a day "}</div> }
+    html! { <div><h1>{ day.date.format("%A, %b %e, %Y") }</h1>{ "a day "}</div> }
 }
