@@ -3,14 +3,29 @@ use chrono::prelude::*;
 use std::time::Duration;
 
 pub struct History {
-    pub days: Vec<Inventory>,
+    pub days: Vec<Day>,
     pub offset: FixedOffset,
+}
+
+pub struct Day {
+    pub date: Date<FixedOffset>,
+    pub inventory: Inventory,
 }
 
 impl History {
     /// Group the given inventory by day, for a given offset(timezone).
     pub fn from(inventory: Inventory, offset: FixedOffset) -> Self {
-        let days = todo!();
+        let days = group_by(inventory.items, |mr| {
+            Utc.timestamp_millis(mr.epoch_millis_utc as i64)
+                .with_timezone(&offset)
+                .date()
+        })
+        .iter()
+        .map(|d| Day {
+            date: d.0,
+            inventory: Inventory { items: d.clone().1 },
+        })
+        .collect();
         Self { days, offset }
     }
 }
@@ -40,6 +55,8 @@ mod test {
     use super::*;
     use crate::model::*;
 
+    const LOCAL_OFFSET_SECONDS: i32 = 240;
+
     fn make_time(days: u32) -> DateTime<Utc> {
         Utc.ymd(2020, 08, days + 1).and_hms(0, 0, 0)
     }
@@ -61,7 +78,7 @@ mod test {
             items: items.clone(),
         };
 
-        let history = History::from(inventory, todo!());
+        let history = History::from(inventory, FixedOffset::west(LOCAL_OFFSET_SECONDS));
 
         assert_eq!(history.days.len(), size as usize);
     }
