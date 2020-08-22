@@ -34,11 +34,26 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::model::*;
 
     #[test]
     fn test_grouping() {
+        let now = Utc::now();
+
         let item_type = crate::model::DefaultItemType::Resentment.instance();
-        let inventory = Inventory::new(item_type, "nil", 0);
+
+        let mut items = vec![];
+        for i in 0..10 {
+            let time: DateTime<Utc> = todo!();
+            items.push(Item::new(
+                item_type,
+                "nil".to_string(),
+                time.timestamp_millis() as u64,
+            ))
+        }
+        let inventory = Inventory { items };
+
+        println!("{:?}", inventory);
 
         todo!()
     }
