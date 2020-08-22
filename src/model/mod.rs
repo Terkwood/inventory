@@ -1,6 +1,4 @@
-mod history;
-
-pub use history::History;
+pub mod history;
 
 use crate::time::*;
 use chrono::prelude::*;
