@@ -69,6 +69,7 @@ textarea {
   grid-template: repeat(7, 1fr) / repeat(2, 1fr);
   grid-auto-flow: row;
 }
+
 #inputgridfocus {
   height: 100vh;
   display: grid;
@@ -86,5 +87,12 @@ textarea {
 #history {
   display: grid;
   grid-gap: 5px;
+  grid-auto-flow: row;
+}
+
+#config {
+  display: grid;
+  grid-gap: 5px;
+  grid-template: repeat(3, 1fr) / repeat(1, 1fr);
   grid-auto-flow: row;
 }
