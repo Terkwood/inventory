@@ -5,6 +5,8 @@ mod history_view;
 mod nav;
 
 pub use app::App;
+pub use config::Config;
+pub use daily::Daily;
 pub use history_view::HistoryView;
 pub use nav::Nav;
 

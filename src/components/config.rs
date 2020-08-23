@@ -39,14 +39,34 @@ impl Component for Config {
     }
 }
 
+const REPO_URL: &str = "https://github.com/Terkwood/inventory";
 impl Config {
     fn view_inventory_buttons(&self) -> Html {
-        todo!()
+        html! {
+            <div>
+                <h1>{ "Configure Inventory Buttons"}</h1>
+                <p>{ "🏗 Coming Soon 🏗" }</p>
+            </div>
+        }
     }
     fn view_about(&self) -> Html {
-        todo!()
+        html! {
+            <div>
+                <h1>{ "About" }</h1>
+                <p>{ "INVENTORY helps you track Fourth and Tenth Step inventories used in Twelve Step programs." }</p>
+                <p>{ "INVENTORY is designed with privacy in mind.  Your data will never be transmitted to a third party.  Data is kept in browser local storage, unencypted.  KEEP YOUR DATA SAFE: make sure there is no malware on your system!" }</p>
+                <h2>{ "Source Code" }</h2>
+                <p>{ "The source code is available under MIT license." }</p>
+                <p><a href=REPO_URL>{ REPO_URL }</a></p>
+            </div>
+        }
     }
     fn view_export(&self) -> Html {
-        todo!()
+        html! {
+            <div>
+                <h1>{ "Export Data"}</h1>
+                <p>{ "🏗 Coming Soon 🏗" }</p>
+            </div>
+        }
     }
 }
