@@ -1,7 +1,4 @@
-use super::daily::Daily;
-use super::HistoryView;
-use super::Nav;
-use super::Page;
+use super::*;
 use crate::model::*;
 use crate::repo::Repo;
 use crate::time::{js_local_offset, js_utc_now};
@@ -120,7 +117,11 @@ impl App {
     }
 
     fn view_config(&self) -> Html {
-        html! {<div>{ "🚧 Coming soon: config 🚧" }</div>}
+        html! {
+            <Config
+                inventory_buttons={InventoryButtonCollection { user_item_types: vec![]} }
+            />
+        }
     }
 
     fn view_nav(&self) -> Html {
