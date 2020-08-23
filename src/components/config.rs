@@ -46,6 +46,8 @@ impl Config {
             <div class="configsection">
                 <h1>{ "Configure Inventory Buttons"}</h1>
                 <div>{ "🏗 Coming Soon 🏗" }</div>
+                <p>{ "Your current inventory buttons:" }</p>
+                <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
             </div>
         }
     }
@@ -69,4 +71,8 @@ impl Config {
             </div>
         }
     }
+}
+
+fn view_item_type(item_type: &ItemType) -> Html {
+    todo!()
 }
