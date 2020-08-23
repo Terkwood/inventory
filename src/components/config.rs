@@ -45,7 +45,7 @@ impl Config {
         html! {
             <div class="configsection">
                 <h1>{ "Configure Inventory Buttons"}</h1>
-                <p>{ "🏗 Coming Soon 🏗" }</p>
+                <div>{ "🏗 Coming Soon 🏗" }</div>
             </div>
         }
     }
@@ -65,7 +65,7 @@ impl Config {
         html! {
             <div class="configsection">
                 <h1>{ "Export Data"}</h1>
-                <p>{ "🏗 Coming Soon 🏗" }</p>
+                <div>{ "🏗 Coming Soon 🏗" }</div>
             </div>
         }
     }
