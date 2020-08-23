@@ -30,7 +30,7 @@ impl Component for Config {
     }
     fn view(&self) -> Html {
         html! {
-            <div id="config">
+            <div>
                 { self.view_export() }
                 { self.view_inventory_buttons() }
                 { self.view_about() }
@@ -43,7 +43,7 @@ const REPO_URL: &str = "https://github.com/Terkwood/inventory";
 impl Config {
     fn view_inventory_buttons(&self) -> Html {
         html! {
-            <div>
+            <div class="configsection">
                 <h1>{ "Configure Inventory Buttons"}</h1>
                 <p>{ "🏗 Coming Soon 🏗" }</p>
             </div>
@@ -51,7 +51,7 @@ impl Config {
     }
     fn view_about(&self) -> Html {
         html! {
-            <div>
+            <div class="configsection">
                 <h1>{ "About" }</h1>
                 <p>{ "INVENTORY helps you track Fourth and Tenth Step inventories used in Twelve Step programs." }</p>
                 <p>{ "INVENTORY is designed with privacy in mind.  Your data will never be transmitted to a third party.  Data is kept in browser local storage, unencypted.  KEEP YOUR DATA SAFE: make sure there is no malware on your system!" }</p>
@@ -63,7 +63,7 @@ impl Config {
     }
     fn view_export(&self) -> Html {
         html! {
-            <div>
+            <div class="configsection">
                 <h1>{ "Export Data"}</h1>
                 <p>{ "🏗 Coming Soon 🏗" }</p>
             </div>

@@ -90,9 +90,7 @@ textarea {
   grid-auto-flow: row;
 }
 
-#config {
-  display: grid;
-  grid-gap: 5px;
-  grid-template: repeat(3, 1fr) / repeat(1, 1fr);
-  grid-auto-flow: row;
+.configsection {
+  width: 100vh;
+  margin: 2vh;
 }
