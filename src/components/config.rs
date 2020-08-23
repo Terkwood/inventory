@@ -74,5 +74,7 @@ impl Config {
 }
 
 fn view_item_type(item_type: &ItemType) -> Html {
-    todo!()
+    let emoji = &item_type.emoji;
+    let name = &item_type.name;
+    html! { <div>{ format!("{} {}", emoji, name) }</div> }
 }
