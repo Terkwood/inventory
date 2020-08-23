@@ -91,6 +91,10 @@ textarea {
 }
 
 .configsection {
-  width: 100vh;
   margin: 2vh;
+}
+
+.configsection p {
+  width: fit-content;
+  word-wrap: normal;
 }
