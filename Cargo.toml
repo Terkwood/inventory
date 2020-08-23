@@ -5,7 +5,7 @@ edition = "2018"
 license = "MIT"
 name = "inventory"
 repository = "https://github.com/Terkwood/inventory"
-version = "0.3.3-a"
+version = "0.3.3"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
