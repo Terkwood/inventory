@@ -17,7 +17,7 @@ impl Component for Config {
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self { link, props }
     }
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
         false
     }
     fn change(&mut self, props: Self::Properties) -> ShouldRender {

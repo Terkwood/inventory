@@ -32,8 +32,8 @@ impl Item {
 impl DefaultItemType {
     pub fn instance(&self) -> ItemType {
         let (name, emoji) = match self {
-            DefaultItemType::Fear => ("fear".to_string(), "😱".to_string()),
-            DefaultItemType::Resentment => ("resentment".to_string(), "😠".to_string()),
+            DefaultItemType::Fear => ("Fear".to_string(), "😱".to_string()),
+            DefaultItemType::Resentment => ("Resentment".to_string(), "😠".to_string()),
         };
         ItemType { name, emoji }
     }
