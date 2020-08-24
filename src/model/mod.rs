@@ -6,7 +6,7 @@ pub use item::*;
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct Inventory {
     pub items: Vec<Item>,
 }

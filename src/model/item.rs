@@ -1,14 +1,14 @@
 use super::UtcMillis;
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct Item {
     pub epoch_millis_utc: u64,
     pub item_type: ItemType,
     pub text: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct ItemType {
     pub name: String,
     pub emoji: String,
