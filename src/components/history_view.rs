@@ -60,13 +60,8 @@ impl Component for HistoryView {
         }
     }
     fn view(&self) -> Html {
-        let style = format!(
-            "grid-template: repeat({}, 1fr) / repeat(1, 1fr);",
-            self.history.days.len()
-        );
-
         html! {
-            <div id="history" style=style>
+            <div id="history">
             {
                 self.history.days.iter()
                     .map(|day|self.view_day(day))
