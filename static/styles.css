@@ -98,3 +98,8 @@ textarea {
   width: fit-content;
   word-wrap: normal;
 }
+
+#exportbutton {
+  font-size: 4vw;
+  height: 90%;
+}

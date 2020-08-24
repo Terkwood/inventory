@@ -1,6 +1,7 @@
 mod app;
 mod config;
 mod daily;
+mod export;
 mod history_view;
 mod nav;
 

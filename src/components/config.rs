@@ -1,4 +1,6 @@
+use super::export;
 use crate::model::*;
+use crate::time::js_utc_now;
 use yew::prelude::*;
 
 pub struct Config {
@@ -9,6 +11,7 @@ pub struct Config {
 #[derive(Properties, PartialEq, Clone)]
 pub struct Props {
     pub inventory_buttons: InventoryButtonCollection,
+    pub inventory: Inventory,
 }
 
 impl Component for Config {
@@ -41,6 +44,16 @@ impl Component for Config {
 
 const REPO_URL: &str = "https://github.com/Terkwood/inventory";
 impl Config {
+    fn view_export(&self) -> Html {
+        html! {
+            <div class="configsection">
+                <h1>{ "Export Data"}</h1>
+                <p>{ "Use this button to save your data to a file on your device." }</p>
+                <div>{ export::button(&self.props.inventory, js_utc_now()) }</div>
+            </div>
+        }
+    }
+
     fn view_inventory_buttons(&self) -> Html {
         html! {
             <div class="configsection">
@@ -51,6 +64,7 @@ impl Config {
             </div>
         }
     }
+
     fn view_about(&self) -> Html {
         html! {
             <div class="configsection">
@@ -60,14 +74,6 @@ impl Config {
                 <h2>{ "Source Code" }</h2>
                 <p>{ "The source code is available under MIT license." }</p>
                 <p><a href=REPO_URL>{ REPO_URL }</a></p>
-            </div>
-        }
-    }
-    fn view_export(&self) -> Html {
-        html! {
-            <div class="configsection">
-                <h1>{ "Export Data"}</h1>
-                <div>{ "🏗 Coming Soon 🏗" }</div>
             </div>
         }
     }

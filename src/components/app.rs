@@ -120,6 +120,7 @@ impl App {
         html! {
             <Config
                 inventory_buttons={InventoryButtonCollection { user_item_types: vec![]} }
+                inventory={self.inventory.clone()}
             />
         }
     }
