@@ -100,7 +100,7 @@ mod test {
         for i in 0..(size - 1) {
             let this_date = history.days[i].date;
             let next_date = history.days[i + 1].date;
-            assert!(this_date < next_date);
+            assert!(this_date > next_date);
         }
     }
 }
