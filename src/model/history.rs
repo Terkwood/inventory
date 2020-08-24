@@ -1,12 +1,13 @@
 use crate::model::Inventory;
 use chrono::prelude::*;
 
+#[derive(Debug)]
 pub struct History {
     pub days: Vec<Day>,
     pub offset: FixedOffset,
 }
 
-#[derive(PartialOrd, PartialEq)]
+#[derive(Ord, Eq, PartialOrd, PartialEq, Debug)]
 pub struct Day {
     pub date: Date<FixedOffset>,
     pub inventory: Inventory,
@@ -15,7 +16,7 @@ pub struct Day {
 impl History {
     /// Group the given inventory by day, for a given offset(timezone).
     pub fn from(inventory: &Inventory, offset: FixedOffset) -> Self {
-        let days: Vec<Day> = group_by(&inventory.items, |mr| {
+        let mut days: Vec<Day> = group_by(&inventory.items, |mr| {
             Utc.timestamp_millis(mr.epoch_millis_utc as i64)
                 .with_timezone(&offset)
                 .date()
@@ -29,6 +30,8 @@ impl History {
             }
         })
         .collect();
+        days.sort_unstable();
+        days.reverse();
         Self { days, offset }
     }
 }
@@ -97,6 +100,7 @@ mod test {
         let size = 3;
         let inventory = inventory_with(3);
         let history = History::from(&inventory, FixedOffset::west(LOCAL_OFFSET_SECONDS));
+
         for i in 0..(size - 1) {
             let this_date = history.days[i].date;
             let next_date = history.days[i + 1].date;
