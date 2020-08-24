@@ -2,8 +2,6 @@
 
 This webapp is designed to help track inventory related to 12-step programs.
 
-🚧 _It is currently under construction._ 🚧
-
 ![work in progress](https://user-images.githubusercontent.com/38859656/90965746-e23c8380-e498-11ea-99a5-77d6cf5f00a1.png)
 
 ## Designed for Privacy
