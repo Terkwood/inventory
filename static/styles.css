@@ -85,9 +85,11 @@ textarea {
 }
 
 #history {
-  display: grid;
-  grid-gap: 5px;
-  grid-auto-flow: row;
+  width: 100%;
+}
+
+#history ul {
+  list-style-type: none;
 }
 
 .configsection {
