@@ -37,20 +37,40 @@ impl Component for InventoryButtons {
         let free = self.props.inventory_buttons.free_user_buttons();
         html! {
          <div class="configsection">
-             <h1>{ "Configure Inventory Buttons"}</h1>
-             <h2>{ "Current buttons:" }</h2>
-             <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
-             <h2>{ "Add a button" }</h2>
-             <div> {
+            <h1>{ "Configure Inventory Buttons"}</h1>
+            <h2>{ "Current buttons:" }</h2>
+            <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
+            <h2>{ "Add a button" }</h2>
+            <div> {
                 if free > 0 {
                     format!("You may add {} more buttons.", free)
                 } else {
                     "You need to delete a button before you can add another.".to_string()
                 }
             } </div>
+            {
+                if free > 0 {
+                    self.view_button_selections()
+                } else {
+                    html! { <></> }
+                }
+            }
          </div>
         }
     }
+}
+
+impl InventoryButtons {
+    fn view_button_selections(&self) -> Html {
+        InventoryButtonCollection::allowed_emojis()
+            .iter()
+            .map(view_button)
+            .collect::<Html>()
+    }
+}
+
+fn view_button(s: &String) -> Html {
+    todo!()
 }
 
 fn view_item_type(item_type: &ItemType) -> Html {
