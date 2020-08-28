@@ -1,4 +1,4 @@
-use super::export;
+use super::{export, inventory_buttons::InventoryButtons};
 use crate::model::*;
 use crate::time::js_utc_now;
 use yew::prelude::*;
@@ -56,12 +56,8 @@ impl Config {
 
     fn view_inventory_buttons(&self) -> Html {
         html! {
-            <div class="configsection">
-                <h1>{ "Configure Inventory Buttons"}</h1>
-                <div>{ "🏗 Coming Soon 🏗" }</div>
-                <p>{ "Your current inventory buttons:" }</p>
-                <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
-            </div>
+            <InventoryButtons
+                inventory_buttons=self.props.inventory_buttons.clone()/>
         }
     }
 
@@ -77,10 +73,4 @@ impl Config {
             </div>
         }
     }
-}
-
-fn view_item_type(item_type: &ItemType) -> Html {
-    let emoji = &item_type.emoji;
-    let name = &item_type.name;
-    html! { <div>{ format!("{} {}", emoji, name) }</div> }
 }

@@ -1,6 +1,8 @@
 pub mod history;
+mod inventory_button_collection;
 mod item;
 
+pub use inventory_button_collection::*;
 pub use item::*;
 
 use chrono::prelude::*;

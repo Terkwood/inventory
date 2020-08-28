@@ -3,12 +3,14 @@ mod config;
 mod daily;
 mod export;
 mod history_view;
+mod inventory_buttons;
 mod nav;
 
 pub use app::App;
 pub use config::Config;
 pub use daily::Daily;
 pub use history_view::HistoryView;
+pub use inventory_buttons::InventoryButtons;
 pub use nav::Nav;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
