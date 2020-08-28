@@ -20,8 +20,8 @@ impl Component for InventoryButtons {
         Self { props, link }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
-        todo!()
+    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
+        false
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
@@ -70,7 +70,9 @@ impl InventoryButtons {
 }
 
 fn view_button(s: &String) -> Html {
-    todo!()
+    html! {
+        <button>{ s }</button>
+    }
 }
 
 fn view_item_type(item_type: &ItemType) -> Html {
