@@ -16,7 +16,7 @@ impl InventoryButtonCollection {
     }
 
     pub fn free_user_buttons(&self) -> u8 {
-        (self.all().len() - DefaultItemType::all().len()) as u8 - MAX_USER_BUTTONS
+        MAX_USER_BUTTONS - (self.all().len() - DefaultItemType::all().len()) as u8
     }
 
     pub fn allowed_emojis() -> Vec<String> {
