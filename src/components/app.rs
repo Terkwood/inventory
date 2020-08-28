@@ -1,12 +1,12 @@
 use super::*;
 use crate::model::*;
-use crate::repo::Repo;
+use crate::repo::InventoryRepo;
 use crate::time::{js_local_offset, js_utc_now};
 use yew::prelude::*;
 
 pub struct App {
     page: Page,
-    repo: Repo,
+    repo: InventoryRepo,
     inventory: Inventory,
     nav_state: NavState,
     add_item: Option<Callback<Item>>,
@@ -44,7 +44,7 @@ impl Component for App {
         let add_inventory_button =
             Some(link.callback(|item_type| Msg::AddInventoryButton(item_type)));
 
-        let repo = Repo::new();
+        let repo = InventoryRepo::new();
         let inventory = repo.read_inventory();
         let page = Page::default();
 

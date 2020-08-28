@@ -1,13 +1,20 @@
 use super::*;
+use serde_derive::{Deserialize, Serialize};
 
 const MAX_USER_BUTTONS: u8 = 3;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Deserialize, Serialize)]
 pub struct InventoryButtonCollection {
     pub user_item_types: Vec<ItemType>,
 }
 
 impl InventoryButtonCollection {
+    pub fn empty() -> Self {
+        Self {
+            user_item_types: vec![],
+        }
+    }
+
     pub fn all(&self) -> Vec<ItemType> {
         let mut r = self.user_item_types.clone();
         for d in DefaultItemType::all() {
