@@ -111,14 +111,14 @@ impl InventoryButtons {
                     name: ni_c.clone(),
                 })
             } else {
-                todo!()
+                Msg::NothingHappened
             }
         });
         html! {
             <div class="configsection">
                 { self.view_intro() }
                 <div>{ "Input the name" }</div>
-                <input/>
+                <input oninput={self.link.callback(|e: InputData| Msg::InputUpdated(e.value))}/>
                 <button onkeyup={cb}>{ "ADD" }</button>
             </div>
         }
