@@ -5,6 +5,7 @@ pub struct InventoryButtons {
     pub link: ComponentLink<Self>,
     pub props: Props,
     mode: Mode,
+    name_input: String,
 }
 
 #[derive(Properties, Clone, PartialEq)]
@@ -16,6 +17,8 @@ pub struct Props {
 pub enum Msg {
     EmojiSelected(String),
     AddButton(ItemType),
+    InputUpdated(String),
+    NothingHappened,
 }
 
 enum Mode {
@@ -33,18 +36,29 @@ impl Component for InventoryButtons {
             props,
             link,
             mode: Mode::SelectEmoji,
+            name_input: String::new(),
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::EmojiSelected(emoji) => self.mode = Mode::EnterName { emoji },
+            Msg::EmojiSelected(emoji) => {
+                self.mode = Mode::EnterName { emoji };
+                self.name_input.clear();
+                true
+            }
             Msg::AddButton(item_type) => {
                 self.mode = Mode::SelectEmoji;
+                self.name_input.clear();
                 self.props.add_inventory_button.emit(item_type);
+                true
             }
+            Msg::InputUpdated(name_input) => {
+                self.name_input = name_input;
+                true
+            }
+            Msg::NothingHappened => false,
         }
-        true
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
@@ -57,33 +71,59 @@ impl Component for InventoryButtons {
     }
 
     fn view(&self) -> Html {
-        let free = self.props.inventory_buttons.free_user_buttons();
-        html! {
-         <div class="configsection">
-            <h1>{ "Configure Inventory Buttons"}</h1>
-            <h2>{ "Current buttons:" }</h2>
-            <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
-            <h2>{ "Add a button" }</h2>
-            <div> {
-                if free > 0 {
-                    format!("You may add {} more buttons.", free)
-                } else {
-                    "You need to delete a button before you can add another.".to_string()
-                }
-            } </div>
-            {
-                if free > 0 {
-                    self.view_button_selections()
-                } else {
-                    html! { <></> }
-                }
-            }
-         </div>
+        match &self.mode {
+            Mode::SelectEmoji => self.view_emoji_selection(),
+            Mode::EnterName { emoji } => self.view_name_input(emoji.clone()),
         }
     }
 }
 
 impl InventoryButtons {
+    fn view_emoji_selection(&self) -> Html {
+        let free = self.props.inventory_buttons.free_user_buttons();
+        html! {
+            <div class="configsection">
+                { self.view_intro() }
+                <div> {
+                    if free > 0 {
+                        format!("You may add {} more buttons.", free)
+                    } else {
+                        "You need to delete a button before you can add another.".to_string()
+                    }
+                } </div>
+                {
+                    if free > 0 {
+                        self.view_button_selections()
+                    } else {
+                        html! { <></> }
+                    }
+                }
+            </div>
+        }
+    }
+
+    fn view_name_input(&self, emoji: String) -> Html {
+        let ni_c = self.name_input.clone();
+        let cb = self.link.callback(move |e: web_sys::KeyboardEvent| {
+            if e.key_code() == 13 {
+                Msg::AddButton(ItemType {
+                    emoji: emoji.clone(),
+                    name: ni_c.clone(),
+                })
+            } else {
+                todo!()
+            }
+        });
+        html! {
+            <div class="configsection">
+                { self.view_intro() }
+                <div>{ "Input the name" }</div>
+                <input/>
+                <button onkeyup={cb}>{ "ADD" }</button>
+            </div>
+        }
+    }
+
     fn view_button_selections(&self) -> Html {
         InventoryButtonCollection::allowed_emojis()
             .iter()
@@ -95,6 +135,17 @@ impl InventoryButtons {
         let e = emoji.clone();
         html! {
             <button onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
+        }
+    }
+
+    fn view_intro(&self) -> Html {
+        html! {
+            <>
+                <h1>{ "Configure Inventory Buttons"}</h1>
+                <h2>{ "Current buttons:" }</h2>
+                <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
+                <h2>{ "Add a button" }</h2>
+            </>
         }
     }
 }
