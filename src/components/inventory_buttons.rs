@@ -103,23 +103,34 @@ impl InventoryButtons {
     }
 
     fn view_name_input(&self, emoji: String) -> Html {
+        let em_c = emoji.clone();
         let ni_c = self.name_input.clone();
-        let cb = self.link.callback(move |e: web_sys::KeyboardEvent| {
+        let on_enter_key = self.link.callback(move |e: web_sys::KeyboardEvent| {
             if e.key_code() == 13 {
                 Msg::AddButton(ItemType {
-                    emoji: emoji.clone(),
+                    emoji: em_c.clone(),
                     name: ni_c.clone(),
                 })
             } else {
                 Msg::NothingHappened
             }
         });
+        let ni_c_c = self.name_input.clone();
+        let on_click = self.link.callback(move |_| {
+            Msg::AddButton(ItemType {
+                emoji: emoji.clone(),
+                name: ni_c_c.clone(),
+            })
+        });
         html! {
             <div class="configsection">
                 { self.view_intro() }
                 <div>{ "Input the name" }</div>
-                <input oninput={self.link.callback(|e: InputData| Msg::InputUpdated(e.value))}/>
-                <button onkeyup={cb}>{ "ADD" }</button>
+                <input
+                    oninput={self.link.callback(|e: InputData| Msg::InputUpdated(e.value))}
+                    onkeyup={on_enter_key.clone()}
+                />
+                <button onkeyup={on_enter_key} onclick={on_click}>{ "ADD" }</button>
             </div>
         }
     }
