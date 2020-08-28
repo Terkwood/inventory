@@ -87,13 +87,14 @@ impl InventoryButtons {
     fn view_button_selections(&self) -> Html {
         InventoryButtonCollection::allowed_emojis()
             .iter()
-            .map(|emoji| self.view_button(emoji))
+            .map(|emoji| self.view_button(emoji.to_string()))
             .collect::<Html>()
     }
 
-    fn view_button(&self, emoji: &String) -> Html {
+    fn view_button(&self, emoji: String) -> Html {
+        let e = emoji.clone();
         html! {
-            <button>{ emoji }</button>
+            <button onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
         }
     }
 }
