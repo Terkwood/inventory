@@ -10,8 +10,9 @@ pub struct InventoryButtonCollection {
 impl InventoryButtonCollection {
     pub fn all(&self) -> Vec<ItemType> {
         let mut r = self.user_item_types.clone();
-        r.insert(0, DefaultItemType::Fear.instance());
-        r.insert(0, DefaultItemType::Resentment.instance());
+        for d in DefaultItemType::all() {
+            r.insert(0, d.instance())
+        }
         r
     }
 

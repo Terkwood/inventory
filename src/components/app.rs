@@ -14,6 +14,7 @@ pub struct App {
     nav_to: Option<Callback<Page>>,
     hide_nav: Option<Callback<()>>,
     show_nav: Option<Callback<()>>,
+    add_inventory_button: Option<Callback<ItemType>>,
 }
 
 #[derive(PartialEq)]
@@ -27,6 +28,7 @@ pub enum Msg {
     NavigateTo(Page),
     HideNav,
     ShowNav,
+    AddInventoryButton(ItemType),
 }
 
 impl Component for App {
@@ -39,6 +41,8 @@ impl Component for App {
         let nav_to = Some(link.callback(|page| Msg::NavigateTo(page)));
         let hide_nav = Some(link.callback(|_| Msg::HideNav));
         let show_nav = Some(link.callback(|_| Msg::ShowNav));
+        let add_inventory_button =
+            Some(link.callback(|item_type| Msg::AddInventoryButton(item_type)));
 
         let repo = Repo::new();
         let inventory = repo.read_inventory();
@@ -54,6 +58,7 @@ impl Component for App {
             nav_to,
             hide_nav,
             show_nav,
+            add_inventory_button,
         }
     }
 
@@ -70,6 +75,7 @@ impl Component for App {
             Msg::NavigateTo(page) => self.page = page,
             Msg::HideNav => self.nav_state = NavState::Hidden,
             Msg::ShowNav => self.nav_state = NavState::Visible,
+            Msg::AddInventoryButton(_item_type) => todo!(),
         }
         true
     }
@@ -116,11 +122,21 @@ impl App {
         }
     }
 
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
+    // TODO LOAD FROM DISK
     fn view_config(&self) -> Html {
         html! {
             <Config
-                inventory_buttons={InventoryButtonCollection { user_item_types: vec![]} }
+                inventory_buttons={
+                    InventoryButtonCollection { user_item_types: vec![]}
+                }
                 inventory={self.inventory.clone()}
+                add_inventory_button={self.add_inventory_button.as_ref().expect("add inv button cb")}
             />
         }
     }

@@ -12,6 +12,7 @@ pub struct Config {
 pub struct Props {
     pub inventory_buttons: InventoryButtonCollection,
     pub inventory: Inventory,
+    pub add_inventory_button: Callback<ItemType>,
 }
 
 impl Component for Config {
@@ -57,7 +58,9 @@ impl Config {
     fn view_inventory_buttons(&self) -> Html {
         html! {
             <InventoryButtons
-                inventory_buttons=self.props.inventory_buttons.clone()/>
+                inventory_buttons=self.props.inventory_buttons.clone()
+                add_inventory_button=self.props.add_inventory_button.clone()
+            />
         }
     }
 

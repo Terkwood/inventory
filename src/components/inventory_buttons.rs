@@ -4,24 +4,44 @@ use yew::prelude::*;
 pub struct InventoryButtons {
     pub link: ComponentLink<Self>,
     pub props: Props,
+    mode: Mode,
 }
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory_buttons: InventoryButtonCollection,
+    pub add_inventory_button: Callback<ItemType>,
+}
+
+pub enum Msg {
+    EmojiSelected(String),
+    TextEntered(String),
+}
+
+enum Mode {
+    SelectEmoji,
+    EnterText { emoji: String },
 }
 
 impl Component for InventoryButtons {
-    type Message = ();
+    type Message = Msg;
 
     type Properties = Props;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
+        Self {
+            props,
+            link,
+            mode: Mode::SelectEmoji,
+        }
     }
 
-    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
-        false
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::EmojiSelected(emoji) => self.mode = Mode::EnterText { emoji },
+            Msg::TextEntered(_) => todo!(),
+        }
+        true
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
@@ -64,14 +84,14 @@ impl InventoryButtons {
     fn view_button_selections(&self) -> Html {
         InventoryButtonCollection::allowed_emojis()
             .iter()
-            .map(view_button)
+            .map(|emoji| self.view_button(emoji))
             .collect::<Html>()
     }
-}
 
-fn view_button(s: &String) -> Html {
-    html! {
-        <button>{ s }</button>
+    fn view_button(&self, emoji: &String) -> Html {
+        html! {
+            <button>{ emoji }</button>
+        }
     }
 }
 
