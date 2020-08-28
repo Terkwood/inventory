@@ -37,4 +37,18 @@ impl InventoryButtonCollection {
         .map(|s| s.to_string())
         .collect()
     }
+
+    pub fn add(&mut self, button: ItemType) -> ButtonAddResult {
+        if (self.user_item_types.len() as u8) < MAX_USER_BUTTONS {
+            self.user_item_types.push(button);
+            ButtonAddResult::Ok
+        } else {
+            ButtonAddResult::NotAdded
+        }
+    }
+}
+
+pub enum ButtonAddResult {
+    Ok,
+    NotAdded,
 }

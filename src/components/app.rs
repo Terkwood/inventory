@@ -1,13 +1,15 @@
 use super::*;
 use crate::model::*;
-use crate::repo::InventoryRepo;
+use crate::repo::{ButtonsRepo, InventoryRepo};
 use crate::time::{js_local_offset, js_utc_now};
 use yew::prelude::*;
 
 pub struct App {
     page: Page,
-    repo: InventoryRepo,
+    inventory_repo: InventoryRepo,
+    buttons_repo: ButtonsRepo,
     inventory: Inventory,
+    buttons: InventoryButtonCollection,
     nav_state: NavState,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<UtcMillis>>,
@@ -44,14 +46,20 @@ impl Component for App {
         let add_inventory_button =
             Some(link.callback(|item_type| Msg::AddInventoryButton(item_type)));
 
-        let repo = InventoryRepo::new();
-        let inventory = repo.read_inventory();
+        let inventory_repo = InventoryRepo::new();
+        let inventory = inventory_repo.read_inventory();
+
+        let buttons_repo = ButtonsRepo::new();
+        let buttons = buttons_repo.read_buttons();
+
         let page = Page::default();
 
         Self {
             page,
-            repo,
+            inventory_repo,
+            buttons_repo,
             inventory,
+            buttons,
             add_item,
             resolve_item,
             nav_state: NavState::Visible,
@@ -66,16 +74,19 @@ impl Component for App {
         match msg {
             Msg::AddItem(item) => {
                 self.inventory.add(item);
-                self.repo.save_inventory(&self.inventory)
+                self.inventory_repo.save_inventory(&self.inventory)
             }
             Msg::ResolveItem(utc) => {
                 self.inventory.resolve(utc.0);
-                self.repo.save_inventory(&self.inventory)
+                self.inventory_repo.save_inventory(&self.inventory)
             }
             Msg::NavigateTo(page) => self.page = page,
             Msg::HideNav => self.nav_state = NavState::Hidden,
             Msg::ShowNav => self.nav_state = NavState::Visible,
-            Msg::AddInventoryButton(_item_type) => todo!(),
+            Msg::AddInventoryButton(item_type) => {
+                self.buttons.add(item_type);
+                self.buttons_repo.save_buttons(&self.buttons)
+            }
         }
         true
     }
@@ -122,19 +133,10 @@ impl App {
         }
     }
 
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
-    // TODO LOAD FROM DISK
     fn view_config(&self) -> Html {
         html! {
             <Config
-                inventory_buttons={
-                    InventoryButtonCollection { user_item_types: vec![]}
-                }
+                inventory_buttons={self.buttons.clone()}
                 inventory={self.inventory.clone()}
                 add_inventory_button={self.add_inventory_button.as_ref().expect("add inv button cb")}
             />

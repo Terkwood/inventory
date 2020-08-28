@@ -15,12 +15,12 @@ pub struct Props {
 
 pub enum Msg {
     EmojiSelected(String),
-    TextEntered(String),
+    AddButton(ItemType),
 }
 
 enum Mode {
     SelectEmoji,
-    EnterText { emoji: String },
+    EnterName { emoji: String },
 }
 
 impl Component for InventoryButtons {
@@ -38,8 +38,11 @@ impl Component for InventoryButtons {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::EmojiSelected(emoji) => self.mode = Mode::EnterText { emoji },
-            Msg::TextEntered(_) => todo!(),
+            Msg::EmojiSelected(emoji) => self.mode = Mode::EnterName { emoji },
+            Msg::AddButton(item_type) => {
+                self.mode = Mode::SelectEmoji;
+                self.props.add_inventory_button.emit(item_type);
+            }
         }
         true
     }
