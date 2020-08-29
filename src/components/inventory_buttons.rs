@@ -93,7 +93,7 @@ impl InventoryButtons {
                 } </div>
                 {
                     if free > 0 {
-                        self.view_button_selections()
+                        self.view_emoji_selection_buttons()
                     } else {
                         html! { <></> }
                     }
@@ -135,18 +135,14 @@ impl InventoryButtons {
         }
     }
 
-    fn view_button_selections(&self) -> Html {
+    fn view_emoji_selection_buttons(&self) -> Html {
         InventoryButtonCollection::allowed_emojis()
             .iter()
-            .map(|emoji| self.view_button(emoji.to_string()))
+            .map(|emoji|{ let e = emoji.clone();
+            html! {
+                <button onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
+            }})
             .collect::<Html>()
-    }
-
-    fn view_button(&self, emoji: String) -> Html {
-        let e = emoji.clone();
-        html! {
-            <button onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
-        }
     }
 
     fn view_intro(&self) -> Html {
