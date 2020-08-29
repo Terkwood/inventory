@@ -70,7 +70,7 @@ impl Component for Daily {
             }
             Msg::FocusInput => {
                 self.mode = Mode::Input;
-                self.props.show_nav.emit(());
+                self.props.show_nav.emit(false);
                 true
             }
             Msg::EnterResolveMode(item_epoch_ms_utc) => {
@@ -79,7 +79,7 @@ impl Component for Daily {
                 } else {
                     self.mode = Mode::Resolve(item_epoch_ms_utc)
                 }
-                self.props.show_nav.emit(());
+                self.props.show_nav.emit(true);
                 true
             }
             Msg::Resolve(item_epoch_millis_utc) => {

@@ -46,6 +46,10 @@ impl InventoryButtonCollection {
             ButtonAddResult::NotAdded
         }
     }
+
+    pub fn delete(&mut self, button: &ItemType) {
+        self.user_item_types.retain(|b| b != button)
+    }
 }
 
 pub enum ButtonAddResult {

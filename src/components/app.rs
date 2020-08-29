@@ -16,6 +16,7 @@ pub struct App {
     nav_to: Option<Callback<Page>>,
     show_nav: Option<Callback<bool>>,
     add_inventory_button: Option<Callback<ItemType>>,
+    del_inventory_button: Option<Callback<ItemType>>,
 }
 
 #[derive(PartialEq)]
@@ -29,6 +30,7 @@ pub enum Msg {
     NavigateTo(Page),
     ShowNav(bool),
     AddInventoryButton(ItemType),
+    DeleteInventoryButton(ItemType),
 }
 
 impl Component for App {
@@ -42,6 +44,8 @@ impl Component for App {
         let show_nav = Some(link.callback(|b| Msg::ShowNav(b)));
         let add_inventory_button =
             Some(link.callback(|item_type| Msg::AddInventoryButton(item_type)));
+        let del_inventory_button =
+            Some(link.callback(|item_type| Msg::DeleteInventoryButton(item_type)));
 
         let inventory_repo = InventoryRepo::new();
         let inventory = inventory_repo.read_inventory();
@@ -63,6 +67,7 @@ impl Component for App {
             nav_to,
             show_nav,
             add_inventory_button,
+            del_inventory_button,
         }
     }
 
@@ -87,6 +92,10 @@ impl Component for App {
             Msg::AddInventoryButton(item_type) => {
                 self.buttons.add(item_type);
                 self.buttons_repo.save_buttons(&self.buttons)
+            }
+            Msg::DeleteInventoryButton(item_type) => {
+                self.buttons.delete(&item_type);
+                self.buttons_repo.save_buttons(&self.buttons);
             }
         }
         true
@@ -139,6 +148,8 @@ impl App {
                 inventory_buttons={self.buttons.clone()}
                 inventory={self.inventory.clone()}
                 add_inventory_button={self.add_inventory_button.as_ref().expect("add inv button cb")}
+                del_inventory_button={self.del_inventory_button.as_ref().expect("del button cb")}
+                show_nav={self.show_nav.as_ref().expect("show nav cb")}
             />
         }
     }

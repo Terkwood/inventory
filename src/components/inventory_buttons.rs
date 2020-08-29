@@ -12,13 +12,17 @@ pub struct InventoryButtons {
 pub struct Props {
     pub inventory_buttons: InventoryButtonCollection,
     pub add_inventory_button: Callback<ItemType>,
+    pub del_inventory_button: Callback<ItemType>,
+    pub show_nav: Callback<bool>,
 }
 
 pub enum Msg {
     EmojiSelected(String),
     AddButton(ItemType),
+    DelButton(ItemType),
     InputUpdated(String),
     NothingHappened,
+    ShowNav(bool),
 }
 
 enum Mode {
@@ -51,6 +55,11 @@ impl Component for InventoryButtons {
                 self.mode = Mode::SelectEmoji;
                 self.name_input.clear();
                 self.props.add_inventory_button.emit(item_type);
+                self.props.show_nav.emit(true);
+                true
+            }
+            Msg::DelButton(item_type) => {
+                self.props.del_inventory_button.emit(item_type);
                 true
             }
             Msg::InputUpdated(name_input) => {
@@ -58,6 +67,10 @@ impl Component for InventoryButtons {
                 true
             }
             Msg::NothingHappened => false,
+            Msg::ShowNav(b) => {
+                self.props.show_nav.emit(b);
+                true
+            }
         }
     }
 
@@ -129,6 +142,7 @@ impl InventoryButtons {
                 <input
                     class="inv_button_name"
                     oninput={self.link.callback(|e: InputData| Msg::InputUpdated(e.value))}
+                    onfocus={self.link.callback(|_| Msg::ShowNav(false))}
                     onkeyup={on_enter_key.clone()}
                 />
                 <button class="inv_button_name"
