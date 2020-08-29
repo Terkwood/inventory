@@ -127,10 +127,12 @@ impl InventoryButtons {
                 { self.view_intro() }
                 <div>{ "Input the name" }</div>
                 <input
+                    class="inv_button_name"
                     oninput={self.link.callback(|e: InputData| Msg::InputUpdated(e.value))}
                     onkeyup={on_enter_key.clone()}
                 />
-                <button onkeyup={on_enter_key} onclick={on_click}>{ "ADD" }</button>
+                <button class="inv_button_name"
+                    onkeyup={on_enter_key} onclick={on_click}>{ "ADD" }</button>
             </div>
         }
     }
