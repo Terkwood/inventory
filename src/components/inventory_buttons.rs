@@ -150,15 +150,23 @@ impl InventoryButtons {
             <>
                 <h1>{ "Configure Inventory Buttons"}</h1>
                 <h2>{ "Current buttons:" }</h2>
-                <div> { self.props.inventory_buttons.all().iter().map(view_item_type).collect::<Html>() } </div>
+                <div> { self.props.inventory_buttons.all().iter().map(view_current_inventory_button).collect::<Html>() } </div>
                 <h2>{ "Add a button" }</h2>
             </>
         }
     }
 }
 
-fn view_item_type(item_type: &ItemType) -> Html {
+fn view_current_inventory_button(item_type: &ItemType) -> Html {
     let emoji = &item_type.emoji;
     let name = &item_type.name;
-    html! { <div>{ format!("{} {}", emoji, name) }</div> }
+    let default_all: Vec<ItemType> = DefaultItemType::all()
+        .iter()
+        .map(|dit| dit.instance())
+        .collect();
+    let can_delete = !default_all.contains(item_type);
+    let del_text = if can_delete { "[ DELETE ]" } else { "" };
+    html! { <div> {
+        format!("{} {} {}", emoji, name, del_text)
+    } </div> }
 }
