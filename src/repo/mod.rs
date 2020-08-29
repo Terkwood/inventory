@@ -53,6 +53,6 @@ impl ButtonsRepo {
 
     pub fn save_buttons(&mut self, buttons: &InventoryButtonCollection) {
         let value = Json(buttons);
-        self.storage_service.store(INVENTORY_KEY, value)
+        self.storage_service.store(BUTTONS_KEY, value)
     }
 }
