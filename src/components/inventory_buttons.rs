@@ -166,23 +166,31 @@ impl InventoryButtons {
             <>
                 <h1>{ "Configure Inventory Buttons"}</h1>
                 <h2>{ "Current buttons:" }</h2>
-                <div> { self.props.inventory_buttons.all().iter().map(view_current_inventory_button).collect::<Html>() } </div>
+                <div> { self.props.inventory_buttons.all().iter().map(|it| self.view_current_inventory_button(it)).collect::<Html>() } </div>
                 <h2>{ "Add a button" }</h2>
             </>
         }
     }
-}
 
-fn view_current_inventory_button(item_type: &ItemType) -> Html {
-    let emoji = &item_type.emoji;
-    let name = &item_type.name;
-    let default_all: Vec<ItemType> = DefaultItemType::all()
-        .iter()
-        .map(|dit| dit.instance())
-        .collect();
-    let can_delete = !default_all.contains(item_type);
-    let del_text = if can_delete { "[ DELETE ]" } else { "" };
-    html! { <div> {
-        format!("{} {} {}", emoji, name, del_text)
-    } </div> }
+    fn view_current_inventory_button(&self, item_type: &ItemType) -> Html {
+        let emoji = &item_type.emoji;
+        let name = &item_type.name;
+        let default_all: Vec<ItemType> = DefaultItemType::all()
+            .iter()
+            .map(|dit| dit.instance())
+            .collect();
+        let can_delete = !default_all.contains(item_type);
+
+        let itc = item_type.clone();
+        html! {
+            <>
+            <div> { format!("{} {}", emoji, name) } </div>
+            { if can_delete {
+                html! { <button onclick={self.link.callback(move |_| Msg::DelButton(itc.clone()))}> { "DELETE 🗑" } </button>}
+            } else {
+                html! { <></> }
+            }}
+            </>
+        }
+    }
 }
