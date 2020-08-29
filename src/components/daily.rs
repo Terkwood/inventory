@@ -188,4 +188,7 @@ impl Daily {
             </li>
         }
     }
+    fn view_inventory_button(&self) -> Html {
+        todo!()
+    }
 }
