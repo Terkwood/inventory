@@ -140,7 +140,7 @@ impl InventoryButtons {
             .iter()
             .map(|emoji|{ let e = emoji.clone();
             html! {
-                <button onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
+                <button class="emojiselection" onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
             }})
             .collect::<Html>()
     }

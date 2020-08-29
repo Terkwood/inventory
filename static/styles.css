@@ -39,6 +39,10 @@ textarea {
   width: 85%;
 }
 
+.emojiselection {
+  font-size: 4vw;
+}
+
 .resolve {
   font-size: 7vw;
   width: 13vw;
