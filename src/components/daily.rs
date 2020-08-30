@@ -187,7 +187,22 @@ impl Daily {
             </li>
         }
     }
-    fn view_inventory_button(&self) -> Html {
-        todo!()
+    fn view_inventory_button(&self, item_type: &ItemType) -> Html {
+        let itc = item_type.clone();
+        let itc2 = item_type.clone();
+        html! {
+            <div class="center">
+                    <button
+                        class="bigbutton"
+                        onclick=
+                            self.link
+                                .callback(
+                                    move |_| Msg::SubmitItem(
+                                        itc.clone()
+                                    ))>
+                        { format!("{} {}", itc2.name, itc2.emoji) }
+                    </button>
+                </div>
+        }
     }
 }
