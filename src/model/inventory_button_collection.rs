@@ -1,7 +1,7 @@
 use super::*;
 use serde_derive::{Deserialize, Serialize};
 
-const MAX_USER_BUTTONS: u8 = 3;
+const MAX_USER_BUTTONS: u8 = 4;
 
 #[derive(Clone, PartialEq, Deserialize, Serialize)]
 pub struct InventoryButtonCollection {
