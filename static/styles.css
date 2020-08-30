@@ -79,7 +79,7 @@ textarea {
 }
 
 #inputgridfocus {
-  height: 100vh;
+  height: 80vh;
   display: grid;
   grid-gap: 5px;
   /** Yes, we added one row! */
