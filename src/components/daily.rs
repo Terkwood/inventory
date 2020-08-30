@@ -20,6 +20,7 @@ pub enum Msg {
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
+    pub inventory_buttons: InventoryButtonCollection,
     pub add_item: Callback<Item>,
     pub resolve_item: Callback<UtcMillis>,
     pub show_nav: Callback<bool>,
@@ -126,30 +127,7 @@ impl Daily {
                         placeholder="Please take inventory.">
                     </textarea>
                 </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::SubmitItem(
-                                        DefaultItemType::Resentment.instance()
-                                    ))>
-                        { "Resentment 😠" }
-                    </button>
-                </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::SubmitItem(
-                                        DefaultItemType::Fear.instance()
-                                    ))>
-                        { "Fear 😱" }
-                    </button>
-                </div>
+                { self.props.inventory_buttons.all().iter().map(|item_type| self.view_inventory_button(item_type)).collect::<Html>()}
             </div>
         }
     }

@@ -128,6 +128,7 @@ impl App {
                 inventory={self.inventory.today(js_utc_now(), js_local_offset())}
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
+                inventory_buttons={self.buttons.clone()}
                 show_nav={self.show_nav.as_ref().expect("show nav cb")}
             />
         }
