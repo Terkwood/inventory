@@ -99,7 +99,7 @@ impl InventoryButtons {
                 { self.view_intro() }
                 <div> {
                     if free > 0 {
-                        format!("You may add {} more buttons.", free)
+                        format!("You may add {} more button{}.", free, if free == 1 { "" } else { "s" })
                     } else {
                         "You need to delete a button before you can add another.".to_string()
                     }
@@ -166,7 +166,7 @@ impl InventoryButtons {
             <>
                 <h1>{ "Configure Inventory Buttons"}</h1>
                 <h2>{ "Current buttons:" }</h2>
-                <div> { self.props.inventory_buttons.all().iter().map(|it| self.view_current_inventory_button(it)).collect::<Html>() } </div>
+                <ul> { self.props.inventory_buttons.all().iter().map(|it| self.view_current_inventory_button(it)).collect::<Html>() } </ul>
                 <h2>{ "Add a button" }</h2>
             </>
         }
@@ -183,14 +183,14 @@ impl InventoryButtons {
 
         let itc = item_type.clone();
         html! {
-            <>
-            <div> { format!("{} {}", emoji, name) } </div>
+            <li>
+            { format!("{} {}", emoji, name) }
             { if can_delete {
-                html! { <button onclick={self.link.callback(move |_| Msg::DelButton(itc.clone()))}> { "DELETE 🗑" } </button>}
+                html! { <button class="deleteinv" onclick={self.link.callback(move |_| Msg::DelButton(itc.clone()))}> { "DELETE 🗑" } </button>}
             } else {
                 html! { <></> }
             }}
-            </>
+            </li>
         }
     }
 }
