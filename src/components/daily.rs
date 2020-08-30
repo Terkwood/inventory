@@ -20,10 +20,10 @@ pub enum Msg {
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub inventory: Inventory,
+    pub inventory_buttons: InventoryButtonCollection,
     pub add_item: Callback<Item>,
     pub resolve_item: Callback<UtcMillis>,
-    pub hide_nav: Callback<()>,
-    pub show_nav: Callback<()>,
+    pub show_nav: Callback<bool>,
 }
 
 #[derive(PartialEq)]
@@ -50,7 +50,7 @@ impl Component for Daily {
         match msg {
             Msg::SubmitItem(item_type) => {
                 self.mode = Mode::Default;
-                self.props.show_nav.emit(());
+                self.props.show_nav.emit(true);
                 if !self.text_area.is_empty() {
                     self.props.add_item.emit(Item::new(
                         item_type,
@@ -71,7 +71,7 @@ impl Component for Daily {
             }
             Msg::FocusInput => {
                 self.mode = Mode::Input;
-                self.props.hide_nav.emit(());
+                self.props.show_nav.emit(false);
                 true
             }
             Msg::EnterResolveMode(item_epoch_ms_utc) => {
@@ -80,7 +80,7 @@ impl Component for Daily {
                 } else {
                     self.mode = Mode::Resolve(item_epoch_ms_utc)
                 }
-                self.props.show_nav.emit(());
+                self.props.show_nav.emit(true);
                 true
             }
             Msg::Resolve(item_epoch_millis_utc) => {
@@ -127,30 +127,7 @@ impl Daily {
                         placeholder="Please take inventory.">
                     </textarea>
                 </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::SubmitItem(
-                                        DefaultItemType::Resentment.instance()
-                                    ))>
-                        { "Resentment 😠" }
-                    </button>
-                </div>
-                <div class="center">
-                    <button
-                        class="bigbutton"
-                        onclick=
-                            self.link
-                                .callback(
-                                    |_| Msg::SubmitItem(
-                                        DefaultItemType::Fear.instance()
-                                    ))>
-                        { "Fear 😱" }
-                    </button>
-                </div>
+                { self.props.inventory_buttons.all().iter().map(|item_type| self.view_inventory_button(item_type)).collect::<Html>()}
             </div>
         }
     }
@@ -186,6 +163,24 @@ impl Daily {
                     }
                 }
             </li>
+        }
+    }
+    fn view_inventory_button(&self, item_type: &ItemType) -> Html {
+        let itc = item_type.clone();
+        let itc2 = item_type.clone();
+        html! {
+            <div class="center">
+                    <button
+                        class="bigbutton"
+                        onclick=
+                            self.link
+                                .callback(
+                                    move |_| Msg::SubmitItem(
+                                        itc.clone()
+                                    ))>
+                        { format!("{} {}", itc2.name, itc2.emoji) }
+                    </button>
+                </div>
         }
     }
 }

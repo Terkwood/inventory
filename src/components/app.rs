@@ -1,19 +1,22 @@
 use super::*;
 use crate::model::*;
-use crate::repo::Repo;
+use crate::repo::{ButtonsRepo, InventoryRepo};
 use crate::time::{js_local_offset, js_utc_now};
 use yew::prelude::*;
 
 pub struct App {
     page: Page,
-    repo: Repo,
+    inventory_repo: InventoryRepo,
+    buttons_repo: ButtonsRepo,
     inventory: Inventory,
+    buttons: InventoryButtonCollection,
     nav_state: NavState,
     add_item: Option<Callback<Item>>,
     resolve_item: Option<Callback<UtcMillis>>,
     nav_to: Option<Callback<Page>>,
-    hide_nav: Option<Callback<()>>,
-    show_nav: Option<Callback<()>>,
+    show_nav: Option<Callback<bool>>,
+    add_inventory_button: Option<Callback<ItemType>>,
+    del_inventory_button: Option<Callback<ItemType>>,
 }
 
 #[derive(PartialEq)]
@@ -25,8 +28,9 @@ pub enum Msg {
     AddItem(Item),
     ResolveItem(UtcMillis),
     NavigateTo(Page),
-    HideNav,
-    ShowNav,
+    ShowNav(bool),
+    AddInventoryButton(ItemType),
+    DeleteInventoryButton(ItemType),
 }
 
 impl Component for App {
@@ -37,23 +41,33 @@ impl Component for App {
         let resolve_item =
             Some(link.callback(|epoch_millis_utc| Msg::ResolveItem(epoch_millis_utc)));
         let nav_to = Some(link.callback(|page| Msg::NavigateTo(page)));
-        let hide_nav = Some(link.callback(|_| Msg::HideNav));
-        let show_nav = Some(link.callback(|_| Msg::ShowNav));
+        let show_nav = Some(link.callback(|b| Msg::ShowNav(b)));
+        let add_inventory_button =
+            Some(link.callback(|item_type| Msg::AddInventoryButton(item_type)));
+        let del_inventory_button =
+            Some(link.callback(|item_type| Msg::DeleteInventoryButton(item_type)));
 
-        let repo = Repo::new();
-        let inventory = repo.read_inventory();
+        let inventory_repo = InventoryRepo::new();
+        let inventory = inventory_repo.read_inventory();
+
+        let buttons_repo = ButtonsRepo::new();
+        let buttons = buttons_repo.read_buttons();
+
         let page = Page::default();
 
         Self {
             page,
-            repo,
+            inventory_repo,
+            buttons_repo,
             inventory,
+            buttons,
             add_item,
             resolve_item,
             nav_state: NavState::Visible,
             nav_to,
-            hide_nav,
             show_nav,
+            add_inventory_button,
+            del_inventory_button,
         }
     }
 
@@ -61,15 +75,28 @@ impl Component for App {
         match msg {
             Msg::AddItem(item) => {
                 self.inventory.add(item);
-                self.repo.save_inventory(&self.inventory)
+                self.inventory_repo.save_inventory(&self.inventory)
             }
             Msg::ResolveItem(utc) => {
                 self.inventory.resolve(utc.0);
-                self.repo.save_inventory(&self.inventory)
+                self.inventory_repo.save_inventory(&self.inventory)
             }
             Msg::NavigateTo(page) => self.page = page,
-            Msg::HideNav => self.nav_state = NavState::Hidden,
-            Msg::ShowNav => self.nav_state = NavState::Visible,
+            Msg::ShowNav(b) => {
+                if b {
+                    self.nav_state = NavState::Visible
+                } else {
+                    self.nav_state = NavState::Hidden
+                }
+            }
+            Msg::AddInventoryButton(item_type) => {
+                self.buttons.add(item_type);
+                self.buttons_repo.save_buttons(&self.buttons)
+            }
+            Msg::DeleteInventoryButton(item_type) => {
+                self.buttons.delete(&item_type);
+                self.buttons_repo.save_buttons(&self.buttons);
+            }
         }
         true
     }
@@ -101,7 +128,7 @@ impl App {
                 inventory={self.inventory.today(js_utc_now(), js_local_offset())}
                 add_item={self.add_item.as_ref().expect("add item cb")}
                 resolve_item={self.resolve_item.as_ref().expect("resolve item cb")}
-                hide_nav={self.hide_nav.as_ref().expect("hide nav cb")}
+                inventory_buttons={self.buttons.clone()}
                 show_nav={self.show_nav.as_ref().expect("show nav cb")}
             />
         }
@@ -119,8 +146,11 @@ impl App {
     fn view_config(&self) -> Html {
         html! {
             <Config
-                inventory_buttons={InventoryButtonCollection { user_item_types: vec![]} }
+                inventory_buttons={self.buttons.clone()}
                 inventory={self.inventory.clone()}
+                add_inventory_button={self.add_inventory_button.as_ref().expect("add inv button cb")}
+                del_inventory_button={self.del_inventory_button.as_ref().expect("del button cb")}
+                show_nav={self.show_nav.as_ref().expect("show nav cb")}
             />
         }
     }
