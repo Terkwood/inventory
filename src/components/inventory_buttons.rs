@@ -115,6 +115,27 @@ impl InventoryButtons {
         }
     }
 
+    fn view_intro(&self) -> Html {
+        html! {
+            <>
+                <h1>{ "Configure Inventory Buttons"}</h1>
+                <h2>{ "Current buttons:" }</h2>
+                <ul> { self.props.inventory_buttons.all().iter().map(|it| self.view_current_inventory_button(it)).collect::<Html>() } </ul>
+                <h2>{ "Add a button" }</h2>
+            </>
+        }
+    }
+
+    fn view_emoji_selection_buttons(&self) -> Html {
+        InventoryButtonCollection::allowed_emojis()
+            .iter()
+            .map(|emoji|{ let e = emoji.clone();
+            html! {
+                <button class="emojiselection" onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
+            }})
+            .collect::<Html>()
+    }
+
     fn view_name_input(&self, emoji: String) -> Html {
         let em_c = emoji.clone();
         let ni_c = self.name_input.clone();
@@ -148,27 +169,6 @@ impl InventoryButtons {
                 <button class="inv_button_name"
                     onkeyup={on_enter_key} onclick={on_click}>{ "ADD" }</button>
             </div>
-        }
-    }
-
-    fn view_emoji_selection_buttons(&self) -> Html {
-        InventoryButtonCollection::allowed_emojis()
-            .iter()
-            .map(|emoji|{ let e = emoji.clone();
-            html! {
-                <button class="emojiselection" onclick={self.link.callback(move |_| Msg::EmojiSelected(e.clone()))}>{ emoji }</button>
-            }})
-            .collect::<Html>()
-    }
-
-    fn view_intro(&self) -> Html {
-        html! {
-            <>
-                <h1>{ "Configure Inventory Buttons"}</h1>
-                <h2>{ "Current buttons:" }</h2>
-                <ul> { self.props.inventory_buttons.all().iter().map(|it| self.view_current_inventory_button(it)).collect::<Html>() } </ul>
-                <h2>{ "Add a button" }</h2>
-            </>
         }
     }
 
