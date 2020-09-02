@@ -38,6 +38,7 @@ impl Inventory {
             .cloned()
             .collect();
         items.sort();
+        items.reverse();
         Inventory { items }
     }
 
@@ -75,7 +76,7 @@ mod test {
         assert_eq!(actual.items.len(), 2);
 
         // They should be grouped such that most recent is first.
-        assert_eq!(actual.items[0].epoch_millis_utc, 500)
+        assert_eq!(actual.items[0].epoch_millis_utc, 1500)
     }
 
     #[test]
@@ -84,16 +85,16 @@ mod test {
         inv.add(Item::new(
             DefaultItemType::Fear.instance(),
             "foo".to_string(),
-            UtcMillis(1500),
+            UtcMillis(500),
         ));
         inv.add(Item::new(
             DefaultItemType::Fear.instance(),
             "foo".to_string(),
-            UtcMillis(500),
+            UtcMillis(1500),
         ));
 
         assert_eq!(inv.items.len(), 2);
-        assert_eq!(inv.items[0].epoch_millis_utc, 500);
-        assert_eq!(inv.items[1].epoch_millis_utc, 1500);
+        assert_eq!(inv.items[0].epoch_millis_utc, 1500);
+        assert_eq!(inv.items[1].epoch_millis_utc, 500);
     }
 }
