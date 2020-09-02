@@ -26,7 +26,7 @@ impl Inventory {
             .timestamp_millis(now.0 as i64)
             .with_timezone(&offset)
             .date();
-        let items = self
+        let mut items: Vec<Item> = self
             .items
             .iter()
             .filter(|item| {
@@ -37,6 +37,7 @@ impl Inventory {
             })
             .cloned()
             .collect();
+        items.sort();
         Inventory { items }
     }
 
@@ -56,12 +57,14 @@ mod test {
     #[test]
     fn today_shows_most_recent_first() {
         let mut inv = Inventory::empty();
-        inv.add(Item::new(
+
+        // Use push here, so prove that today() sorts
+        inv.items.push(Item::new(
             DefaultItemType::Fear.instance(),
             "foo".to_string(),
             UtcMillis(1500),
         ));
-        inv.add(Item::new(
+        inv.items.push(Item::new(
             DefaultItemType::Fear.instance(),
             "foo".to_string(),
             UtcMillis(500),

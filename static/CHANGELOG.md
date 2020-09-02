@@ -2,5 +2,5 @@
 
 ## 1.0.0
 
-- Fix display order of inventory items so that most recent are shown first. #44
-- Add CHANGELOG.
+- Fix insertion order of inventory items so that most recent are at the head of the list. #44
+- Add CHANGELOG. #44
