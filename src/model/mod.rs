@@ -26,7 +26,7 @@ impl Inventory {
             .timestamp_millis(now.0 as i64)
             .with_timezone(&offset)
             .date();
-        let items = self
+        let mut items: Vec<Item> = self
             .items
             .iter()
             .filter(|item| {
@@ -37,15 +37,63 @@ impl Inventory {
             })
             .cloned()
             .collect();
+        items.sort();
         Inventory { items }
     }
 
     pub fn add(&mut self, item: Item) {
-        self.items.push(item)
+        self.items.insert(0, item)
     }
 
     pub fn resolve(&mut self, epoch_millis_utc: u64) {
         self.items
             .retain(|item| item.epoch_millis_utc != epoch_millis_utc)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn today_shows_most_recent_first() {
+        let mut inv = Inventory::empty();
+
+        // Use push here, so prove that today() sorts
+        inv.items.push(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(1500),
+        ));
+        inv.items.push(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(500),
+        ));
+
+        let actual = inv.today(UtcMillis(500), FixedOffset::west(0));
+
+        assert_eq!(actual.items.len(), 2);
+
+        // They should be grouped such that most recent is first.
+        assert_eq!(actual.items[0].epoch_millis_utc, 500)
+    }
+
+    #[test]
+    fn test_add_order() {
+        let mut inv = Inventory::empty();
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(1500),
+        ));
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(500),
+        ));
+
+        assert_eq!(inv.items.len(), 2);
+        assert_eq!(inv.items[0].epoch_millis_utc, 500);
+        assert_eq!(inv.items[1].epoch_millis_utc, 1500);
     }
 }
