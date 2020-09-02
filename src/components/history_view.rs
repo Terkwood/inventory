@@ -26,6 +26,7 @@ pub enum Mode {
     Resolve(UtcMillis),
 }
 
+const EMPTY_MSG: &str = "This is the history of all your entries. You haven't written anything down yet, so there's nothing to show.";
 impl Component for HistoryView {
     type Message = Msg;
     type Properties = Props;
@@ -60,14 +61,19 @@ impl Component for HistoryView {
         }
     }
     fn view(&self) -> Html {
-        html! {
-            <div id="history">
-            {
-                self.history.days.iter()
-                    .map(|day|self.view_day(day))
+        let payload = &self.history.days;
+        if payload.is_empty() {
+            html! { <div id="history"> { EMPTY_MSG } </div> }
+        } else {
+            html! {
+                <div id="history">
+                {
+                    payload.iter()
+                    .map(|day| self.view_day(day))
                     .collect::<Html>()
+                }
+                </div>
             }
-            </div>
         }
     }
 }
