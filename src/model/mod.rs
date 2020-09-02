@@ -49,3 +49,27 @@ impl Inventory {
             .retain(|item| item.epoch_millis_utc != epoch_millis_utc)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn today_shows_most_recent_first() {
+        let mut inv = Inventory::empty();
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(1500),
+        ));
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(500),
+        ));
+
+        let actual = inv.today(UtcMillis(500), FixedOffset::west(0));
+
+        assert_eq!(actual.items.len(), 2);
+        assert_eq!(actual.items[0].epoch_millis_utc, 500)
+    }
+}
