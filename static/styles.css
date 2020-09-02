@@ -100,6 +100,10 @@ textarea {
   list-style-type: none;
 }
 
+#history p {
+  font-size: 4vw;
+}
+
 .configsection {
   margin: 2vh;
 }
