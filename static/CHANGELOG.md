@@ -7,3 +7,7 @@
 - Show software version in config screen. #47, #56
 - Remove CSS config section fit-content. #56
 - Show a message when the history is empty. #51, #57
+
+## 1.0.1
+
+- Fix typo in about view.

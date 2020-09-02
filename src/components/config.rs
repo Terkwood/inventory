@@ -75,7 +75,7 @@ impl Config {
             <div class="configsection">
                 <h1>{ "About" }</h1>
                 <p>{ "INVENTORY helps you track Fourth and Tenth Step inventories used in Twelve Step programs." }</p>
-                <p>{ "INVENTORY is designed with privacy in mind.  Your data will never be transmitted to a third party.  Data is kept in browser local storage, unencypted.  KEEP YOUR DATA SAFE: make sure there is no malware on your system!" }</p>
+                <p>{ "INVENTORY is designed with privacy in mind.  Your data will never be transmitted to a third party.  Data is kept in browser local storage, unencrypted.  KEEP YOUR DATA SAFE: make sure there is no malware on your system!" }</p>
                 <p>{ format!("This is version {}.", VERSION) }</p>
                 <h2>{ "Source Code" }</h2>
                 <p>{ "The source code is available under MIT license." }</p>
