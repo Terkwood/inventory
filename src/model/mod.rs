@@ -70,6 +70,27 @@ mod test {
         let actual = inv.today(UtcMillis(500), FixedOffset::west(0));
 
         assert_eq!(actual.items.len(), 2);
+
+        // They should be grouped such that most recent is first.
         assert_eq!(actual.items[0].epoch_millis_utc, 500)
+    }
+
+    #[test]
+    fn test_add_order() {
+        let mut inv = Inventory::empty();
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(1500),
+        ));
+        inv.add(Item::new(
+            DefaultItemType::Fear.instance(),
+            "foo".to_string(),
+            UtcMillis(500),
+        ));
+
+        assert_eq!(inv.items.len(), 2);
+        assert_eq!(inv.items[0].epoch_millis_utc, 500);
+        assert_eq!(inv.items[1].epoch_millis_utc, 1500);
     }
 }
