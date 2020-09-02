@@ -42,7 +42,7 @@ impl Inventory {
     }
 
     pub fn add(&mut self, item: Item) {
-        self.items.push(item)
+        self.items.insert(0, item)
     }
 
     pub fn resolve(&mut self, epoch_millis_utc: u64) {
