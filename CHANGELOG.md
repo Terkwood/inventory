@@ -11,3 +11,4 @@
 ## 1.0.1
 
 - Fix typo in about view.
+- Use group_by dep.
