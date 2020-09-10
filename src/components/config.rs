@@ -1,7 +1,8 @@
-use super::{export, inventory_buttons::InventoryButtons};
+use super::inventory_buttons::InventoryButtons;
 use crate::model::*;
 use crate::time::js_utc_now;
 use yew::prelude::*;
+use yew_export_button::*;
 
 pub struct Config {
     pub link: ComponentLink<Self>,
@@ -54,7 +55,7 @@ impl Config {
             <div class="configsection">
                 <h1>{ "Export Data"}</h1>
                 <p>{ "Use this button to save your data to a file on your device." }</p>
-                <div>{ export::button(&self.props.inventory, js_utc_now()) }</div>
+                <div>{ export_button(&self.props.inventory, ButtonOpts{ utc_millis: js_utc_now().0, a_class: todo!(), button_id: todo!(), file_prefix: todo!()}) }</div>
             </div>
         }
     }
