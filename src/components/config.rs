@@ -51,11 +51,20 @@ const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 impl Config {
     fn view_export(&self) -> Html {
+        let button = export_button(
+            &self.props.inventory,
+            ButtonOpts {
+                utc_millis: js_utc_now().0,
+                a_class: "download",
+                button_id: "exportbutton",
+                file_prefix: "inventory",
+            },
+        );
         html! {
             <div class="configsection">
                 <h1>{ "Export Data"}</h1>
                 <p>{ "Use this button to save your data to a file on your device." }</p>
-                <div>{ export_button(&self.props.inventory, ButtonOpts{ utc_millis: js_utc_now().0, a_class: todo!(), button_id: todo!(), file_prefix: todo!()}) }</div>
+                <div>{ button }</div>
             </div>
         }
     }
