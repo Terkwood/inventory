@@ -1,6 +1,7 @@
 #![recursion_limit = "1024"]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate yew_export_button;
 
 mod components;
 mod model;
